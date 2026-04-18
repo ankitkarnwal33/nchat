@@ -1,0 +1,218 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  emailVerified Boolean   @default(false)
+  email         String
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  instagramAccounts InstagramAccount[]
+  automations Automation[]
+  @@unique([email])
+  @@map("user")
+}
+
+model InstagramAccount {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+
+  instagramUserId String   @unique
+  profilePicture  String?
+  username        String?
+  accessToken     String
+  tokenExpiresAt  DateTime?
+  connectedAt     DateTime @default(now())
+
+  createdAt       DateTime @default(now())
+  automations Automation[]
+
+  @@index([instagramUserId])
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Automation {
+  id              String   @id @default(cuid())
+  userId          String
+  accountId       String
+
+  name            String
+  isActive        Boolean  @default(true)
+
+  triggerType     TriggerType
+
+  triggeredCount Int @default(0)
+
+  targetMediaId   String?
+
+  createdAt       DateTime @default(now())
+
+  user            User @relation(fields: [userId], references: [id])
+  account         InstagramAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  pendingAutomations PendingAutomation[]
+  triggers        Trigger[]
+  actions         Action[]
+
+  @@index([accountId, isActive])
+}
+
+model Trigger {
+  id            String   @id @default(cuid())
+  automationId  String
+
+  // keyword matching
+  keyword       String?   // "price", "pdf"
+  matchType     MatchType @default(CONTAINS)
+
+  createdAt     DateTime @default(now())
+
+  automation    Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+}
+
+model Action {
+  id            String   @id @default(cuid())
+  automationId  String
+
+  type          ActionType
+
+  // message content
+  message       String?
+
+  // delay (optional)
+  delaySeconds  Int? @default(5)
+
+  meta          Json?
+
+  createdAt     DateTime @default(now())
+
+  automation    Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+}
+
+enum TriggerType {
+  COMMENT
+  DM
+}
+
+enum MatchType {
+  EXACT
+  CONTAINS
+  STARTS_WITH
+}
+
+enum ActionType {
+  SEND_DM
+  REPLY_COMMENT
+  REPLY_COMMENT_SEND_DM
+}
+
+model AutomationLog {
+  id            String   @id @default(cuid())
+  automationId  String
+  instagramUserId String
+  commentId     String?
+
+  status        String   // success / failed
+  error         String?
+
+  createdAt     DateTime @default(now())
+
+  @@unique([automationId, instagramUserId])
+}
+
+model PendingAutomation {
+  id                String   @id @default(cuid())
+
+  automationId      String
+  instagramUserId   String
+  commentId         String
+
+  status            PendingStatus
+
+  automation        Automation @relation(fields: [automationId], references: [id])
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([automationId, instagramUserId])
+}
+
+enum PendingStatus {
+  WAITING_FOR_FOLLOW
+}
+
+model UserInteraction {
+  id                String   @id @default(cuid())
+  instagramUserId   String
+  accountId         String
+
+  lastInteractionAt DateTime
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([instagramUserId, accountId])
+  @@index([accountId])
+}
