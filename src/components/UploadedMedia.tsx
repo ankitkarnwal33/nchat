@@ -58,7 +58,7 @@ export default function UploadedMedia() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4">
+      <div className="grid grid-cols-2 xl:grid-cols-3   gap-4">
         {isLoading
           ? [1, 2, 3, 4, 5, 6].map((item) => (
               <Card key={item} className="w-full ">

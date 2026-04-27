@@ -213,3 +213,19 @@ export async function sendCommentReplyMessageToUser(
     return false;
   }
 }
+
+export async function getUserProfile(senderId: string, accessToken: string) {
+  try {
+    const userProfile = await fetch(
+      `https://graph.instagram.com/v25.0/${senderId}?access_token=${accessToken}`,
+    );
+    if (!userProfile.ok) {
+      throw new Error(userProfile?.statusText);
+    }
+    const userProfileData = await userProfile.json();
+    return userProfileData;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
+}

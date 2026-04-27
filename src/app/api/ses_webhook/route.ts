@@ -12,8 +12,6 @@ export async function POST(req: NextRequest) {
   if (body.Type === "Notification") {
     const message = JSON.parse(body.Message);
 
-    console.log("Email received:", message);
-
     // message contains S3 object key
     // You can fetch email from S3 here
   }

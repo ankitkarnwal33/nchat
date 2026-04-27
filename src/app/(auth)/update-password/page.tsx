@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -51,20 +52,24 @@ const updatePasswordSchema = z
 
 type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;
 
-export default function ResetPassword() {
+function UpdatePasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  if (!token) {
-    toast.error("Invalid token");
-    router.push("/reset-password");
-  }
+
+  useEffect(() => {
+    if (!token) {
+      toast.error("Invalid token");
+      router.push("/reset-password");
+    }
+  }, [token, router]);
+
   const form = useForm<UpdatePasswordSchema>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
-      token: token as string,
+      token: token ?? "",
     },
   });
   const onSubmit = async (data: UpdatePasswordSchema) => {
@@ -176,5 +181,27 @@ export default function ResetPassword() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function ResetPassword() {
+  return (
+    <Suspense
+      fallback={
+        <div>
+          <Header />
+          <div className="flex min-h-svh items-center justify-center">
+            <Card className="w-full max-w-md">
+              <CardHeader className="text-center">
+                <CardTitle>Update your password</CardTitle>
+                <CardDescription>Loading…</CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      }
+    >
+      <UpdatePasswordForm />
+    </Suspense>
   );
 }

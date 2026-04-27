@@ -8,6 +8,9 @@ export const redis =
   globalForRedis.redis ??
   createClient({
     url: process.env.REDIS_URL!,
+    socket: {
+      reconnectStrategy: (retries) => Math.min(retries * 50, 2000),
+    },
   });
 
 if (!redis.isOpen) {

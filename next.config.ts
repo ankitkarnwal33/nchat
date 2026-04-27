@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.fbcdn.net",
       },
+      {
+        protocol: "https",
+        hostname: "**.fbsbx.com",
+      },
     ],
   },
   allowedDevOrigins: ["app.wheatless.in"],

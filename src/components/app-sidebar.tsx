@@ -17,6 +17,7 @@ import {
   HomeIcon,
   LogOutIcon,
   StarIcon,
+  UsersIcon,
   ZapIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -42,6 +43,11 @@ const menuItems = [
         title: "Accounts",
         href: "/account",
         icon: FaInstagram,
+      },
+      {
+        title: "Contacts",
+        href: "/contacts",
+        icon: UsersIcon,
       },
     ],
   },

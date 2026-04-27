@@ -11,6 +11,8 @@ import {
   encryptAccessToken,
 } from "@/src/lib/hashAccessToken";
 
+import { openai } from "@/src/lib/openai";
+
 export const instagramRouter = createTRPCRouter({
   // Get uploaded media of the instagram account
   getUploadedMedia: protectedProcedure.query(async ({ ctx }) => {
@@ -820,6 +822,59 @@ export const appRouter = createTRPCRouter({
         automations,
         nextCursor,
       };
+    }),
+
+  getAIResponse: protectedProcedure
+    .input(
+      z.object({
+        type: z.enum(["improve", "generate"]),
+        message: z.string(),
+        commentOrDm: z.enum(["comment", "dm"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const { type, message, commentOrDm } = input;
+
+        const AI_MODES_COMMENTS: Record<"improve" | "generate", string> = {
+          improve:
+            "Rewrite Instagram replies. Keep same meaning, short, friendly. Never answer.",
+          // generate:
+          //   "Generate Instagram DMs. Friendly, engaging, under 200 characters.",
+          generate:
+            "Generate a 1-sentence Instagram comment reply. Friendly and appreciative. No questions or conversation. Only reply text.",
+        };
+
+        const AI_MODES_DM: Record<"improve" | "generate", string> = {
+          improve:
+            "Rewrite this Instagram DM. Same meaning, 1 short sentence, friendly and natural. Do not add new info. Only rephrase.",
+          generate:
+            "Write a 1-sentence thank you Instagram DM. Friendly and appreciative. No questions. use 1 emoji,",
+        };
+
+        const response = await openai.chat.completions.create({
+          // This is the cheapest and fast model
+          model: "gpt-4.1-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+                commentOrDm === "comment"
+                  ? AI_MODES_COMMENTS[type as "improve" | "generate"]
+                  : AI_MODES_DM[type as "improve" | "generate"],
+            },
+            {
+              role: "user",
+              content: message,
+            },
+          ],
+        });
+
+        return { status: "success", data: response.choices[0].message.content };
+      } catch (error) {
+        console.error("Error is ", error);
+        throw new Error((error as Error).message);
+      }
     }),
 
   instagram: instagramRouter,

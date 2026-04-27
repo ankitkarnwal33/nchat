@@ -7,7 +7,6 @@ import Link from "next/link";
 
 export default async function AccountPage() {
   const user = await caller.getUser();
-  console.log(user);
   return (
     <div className="relative flex flex-col justify-center mt-10">
       <div className="flex gap-2 justify-between">

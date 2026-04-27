@@ -201,6 +201,7 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   instagramAccounts?: Prisma.InstagramAccountListRelationFilter
+  whatsappAccounts?: Prisma.WhatsAppAccountListRelationFilter
   automations?: Prisma.AutomationListRelationFilter
 }
 
@@ -215,6 +216,7 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   instagramAccounts?: Prisma.InstagramAccountOrderByRelationAggregateInput
+  whatsappAccounts?: Prisma.WhatsAppAccountOrderByRelationAggregateInput
   automations?: Prisma.AutomationOrderByRelationAggregateInput
 }
 
@@ -232,6 +234,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   instagramAccounts?: Prisma.InstagramAccountListRelationFilter
+  whatsappAccounts?: Prisma.WhatsAppAccountListRelationFilter
   automations?: Prisma.AutomationListRelationFilter
 }, "id" | "email">
 
@@ -272,6 +275,7 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
 }
 
@@ -286,6 +290,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -300,6 +305,7 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
 }
 
@@ -314,6 +320,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -454,6 +461,20 @@ export type UserUpdateOneRequiredWithoutAutomationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAutomationsInput, Prisma.UserUpdateWithoutAutomationsInput>, Prisma.UserUncheckedUpdateWithoutAutomationsInput>
 }
 
+export type UserCreateNestedOneWithoutWhatsappAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWhatsappAccountsInput, Prisma.UserUncheckedCreateWithoutWhatsappAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWhatsappAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWhatsappAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWhatsappAccountsInput, Prisma.UserUncheckedCreateWithoutWhatsappAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWhatsappAccountsInput
+  upsert?: Prisma.UserUpsertWithoutWhatsappAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWhatsappAccountsInput, Prisma.UserUpdateWithoutWhatsappAccountsInput>, Prisma.UserUncheckedUpdateWithoutWhatsappAccountsInput>
+}
+
 export type UserCreateWithoutInstagramAccountsInput = {
   id: string
   name: string
@@ -464,6 +485,7 @@ export type UserCreateWithoutInstagramAccountsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
 }
 
@@ -477,6 +499,7 @@ export type UserUncheckedCreateWithoutInstagramAccountsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -506,6 +529,7 @@ export type UserUpdateWithoutInstagramAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
 }
 
@@ -519,6 +543,7 @@ export type UserUncheckedUpdateWithoutInstagramAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -532,6 +557,7 @@ export type UserCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
 }
 
@@ -545,6 +571,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -574,6 +601,7 @@ export type UserUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
 }
 
@@ -587,6 +615,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -600,6 +629,7 @@ export type UserCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
 }
 
@@ -613,6 +643,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -642,6 +673,7 @@ export type UserUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
 }
 
@@ -655,6 +687,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -669,6 +702,7 @@ export type UserCreateWithoutAutomationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAutomationsInput = {
@@ -682,6 +716,7 @@ export type UserUncheckedCreateWithoutAutomationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAutomationsInput = {
@@ -711,6 +746,7 @@ export type UserUpdateWithoutAutomationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAutomationsInput = {
@@ -724,6 +760,79 @@ export type UserUncheckedUpdateWithoutAutomationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
+  whatsappAccounts?: Prisma.WhatsAppAccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutWhatsappAccountsInput = {
+  id: string
+  name: string
+  emailVerified?: boolean
+  email: string
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
+  automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWhatsappAccountsInput = {
+  id: string
+  name: string
+  emailVerified?: boolean
+  email: string
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
+  automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWhatsappAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWhatsappAccountsInput, Prisma.UserUncheckedCreateWithoutWhatsappAccountsInput>
+}
+
+export type UserUpsertWithoutWhatsappAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWhatsappAccountsInput, Prisma.UserUncheckedUpdateWithoutWhatsappAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWhatsappAccountsInput, Prisma.UserUncheckedCreateWithoutWhatsappAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWhatsappAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWhatsappAccountsInput, Prisma.UserUncheckedUpdateWithoutWhatsappAccountsInput>
+}
+
+export type UserUpdateWithoutWhatsappAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
+  automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWhatsappAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
+  automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -735,6 +844,7 @@ export type UserCountOutputType = {
   sessions: number
   accounts: number
   instagramAccounts: number
+  whatsappAccounts: number
   automations: number
 }
 
@@ -742,6 +852,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   instagramAccounts?: boolean | UserCountOutputTypeCountInstagramAccountsArgs
+  whatsappAccounts?: boolean | UserCountOutputTypeCountWhatsappAccountsArgs
   automations?: boolean | UserCountOutputTypeCountAutomationsArgs
 }
 
@@ -779,6 +890,13 @@ export type UserCountOutputTypeCountInstagramAccountsArgs<ExtArgs extends runtim
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountWhatsappAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WhatsAppAccountWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountAutomationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AutomationWhereInput
 }
@@ -795,6 +913,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   instagramAccounts?: boolean | Prisma.User$instagramAccountsArgs<ExtArgs>
+  whatsappAccounts?: boolean | Prisma.User$whatsappAccountsArgs<ExtArgs>
   automations?: boolean | Prisma.User$automationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -834,6 +953,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   instagramAccounts?: boolean | Prisma.User$instagramAccountsArgs<ExtArgs>
+  whatsappAccounts?: boolean | Prisma.User$whatsappAccountsArgs<ExtArgs>
   automations?: boolean | Prisma.User$automationsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -846,6 +966,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     instagramAccounts: Prisma.$InstagramAccountPayload<ExtArgs>[]
+    whatsappAccounts: Prisma.$WhatsAppAccountPayload<ExtArgs>[]
     automations: Prisma.$AutomationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1253,6 +1374,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   instagramAccounts<T extends Prisma.User$instagramAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$instagramAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InstagramAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  whatsappAccounts<T extends Prisma.User$whatsappAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$whatsappAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   automations<T extends Prisma.User$automationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$automationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AutomationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1752,6 +1874,30 @@ export type User$instagramAccountsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.InstagramAccountScalarFieldEnum | Prisma.InstagramAccountScalarFieldEnum[]
+}
+
+/**
+ * User.whatsappAccounts
+ */
+export type User$whatsappAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsAppAccount
+   */
+  select?: Prisma.WhatsAppAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsAppAccount
+   */
+  omit?: Prisma.WhatsAppAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsAppAccountInclude<ExtArgs> | null
+  where?: Prisma.WhatsAppAccountWhereInput
+  orderBy?: Prisma.WhatsAppAccountOrderByWithRelationInput | Prisma.WhatsAppAccountOrderByWithRelationInput[]
+  cursor?: Prisma.WhatsAppAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WhatsAppAccountScalarFieldEnum | Prisma.WhatsAppAccountScalarFieldEnum[]
 }
 
 /**

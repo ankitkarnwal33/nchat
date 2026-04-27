@@ -21,7 +21,7 @@ export default async function Dashboard() {
       {/* // active and inactive automations */}
       {instagramAccounts.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4 w-full">
             <Card className="w-full">
               <CardHeader>
                 <CardTitle>Active Automations</CardTitle>
@@ -38,14 +38,7 @@ export default async function Dashboard() {
                 <p>10</p>
               </CardContent>
             </Card>
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Total runs</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>Pending</p>
-              </CardContent>
-            </Card>
+
             <Card className="w-full">
               <CardHeader>
                 <CardTitle>Actions Used</CardTitle>
@@ -62,7 +55,8 @@ export default async function Dashboard() {
       {instagramAccounts.length > 0 ? (
         <div className="flex flex-col">
           <h1 className="text-xl font-semibold flex items-center gap-2">
-            <MdPermMedia className="w-5 h-5 mr-2" /> My Uploaded Media
+            <MdPermMedia className="w-5 h-5 mr-2" /> Start Automating on your
+            Instagram media now
           </h1>
           <p className=" ml-9 text-sm text-muted-foreground mb-6 max-w-2xl">
             Here are your uploaded media on Instagram. You can run automations

@@ -59,3 +59,9 @@ export function decryptAccessToken(encryptedToken: string): string {
   ]);
   return decrypted.toString("utf8");
 }
+
+console.log(
+  decryptAccessToken(
+    "QYMT7TD0/gYcNuJ1:CUMytys0CN+iD0G9feZJqQ==:Af8FXW2zjNBYP9UKKroYWl3ijdtAFxJR+ikIQvBxFbx+ggvdw61UOTIYrJ/VUNhs8/TVRNnrINnWRvDgFn6Vpf+kT3ug1qvKuR7vAfKk8miKoowpv7cHq3cPPLs/o6XCzF6tnv/GlDwQEjQLvipvmsgJKrt2woB5NHatWN4nGT628nvQI3J6otDCXjhAFPwjc6cjKKhOE2eriNdopqNVn1vRpfy5Ofs=",
+  ),
+);

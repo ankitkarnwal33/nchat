@@ -19,6 +19,7 @@ import { deleteCache, getCache, setCache } from "./cache";
 import { isWithin24Hours } from "./interaction";
 import { AutomationLog } from "./generated/prisma/client";
 import { decryptAccessToken } from "./hashAccessToken";
+import { acquireToken } from "./rateLimiter";
 
 const connection = redisQueue;
 
@@ -44,6 +45,7 @@ const worker = new Worker(
           "instagram_follow_up_message_queue",
           data,
         );
+
         return;
       }
       // Process the event for  dm if not postback
@@ -166,7 +168,7 @@ const worker = new Worker(
     connection,
     concurrency: 50,
     limiter: {
-      max: 50,
+      max: 500,
       duration: 1000,
     },
   },
@@ -196,6 +198,22 @@ export const instagramSendCommentWorker = new Worker(
         comment_author_id,
         createAndUpdateLog,
       } = data;
+      const { allowed, waitMs } = await acquireToken(instagramUserId);
+
+      if (!allowed) {
+        // Don't fail — re-queue with exact delay until next token
+        await instagramSendCommentQueue.add(
+          "instagram_send_comment_queue",
+          job.data,
+          {
+            delay: waitMs + 100, // +100ms buffer
+            priority: job.opts.priority,
+            jobId: `retry-${job.id}`, // idempotent
+          },
+        );
+        return; // job completes successfully, no retry count incremented
+      }
+
       try {
         await prisma.automationLog.create({
           data: {
@@ -268,11 +286,32 @@ export const instagramSendCommentWorker = new Worker(
     connection,
     concurrency: 50,
     limiter: {
-      max: 50,
+      max: 500,
       duration: 1000,
     },
   },
 );
+
+instagramSendCommentWorker.on("failed", async (job, err) => {
+  if (job && job.attemptsMade >= 5) {
+    await prisma.automationLog.update({
+      where: {
+        automationId_instagramUserId: {
+          automationId: job.data.automationId || "",
+          instagramUserId: job.data.comment_author_id,
+        },
+      },
+      data: { status: "dead", error: err.message },
+    });
+    await fetch(process.env.SLACK_WEBHOOK_URL_INSTAGRAM || "", {
+      method: "POST",
+      body: JSON.stringify({
+        text: `Automation ${job.data.automationId} failed for user ${job.data.comment_author_id} with error ${err.message}`,
+      }),
+    });
+    // Emit alert to your monitoring
+  }
+});
 
 export const instagramSendDMWorker = new Worker(
   "instagram_send_dm_queue",
@@ -416,7 +455,7 @@ export const instagramSendDMWorker = new Worker(
     connection,
     concurrency: 50,
     limiter: {
-      max: 50,
+      max: 500,
       duration: 1000,
     },
   },
@@ -428,6 +467,7 @@ export const instagramFollowUpMessageWorker = new Worker(
     let automationLog: AutomationLog | null = null;
     try {
       const { data } = job;
+
       const senderId = data.messaging[0]?.sender?.id;
       const postbackPayload = data.messaging[0]?.postback?.payload;
       const pendingAutomationId = postbackPayload.split(":")[1];
@@ -596,7 +636,7 @@ export const instagramFollowUpMessageWorker = new Worker(
     connection,
     concurrency: 50,
     limiter: {
-      max: 50,
+      max: 500,
       duration: 1000,
     },
   },

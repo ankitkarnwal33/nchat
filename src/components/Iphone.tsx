@@ -1,7 +1,7 @@
 import { TbAntennaBars5 } from "react-icons/tb";
 export default function Iphone({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-center min-h-screen relative">
+    <div className="flex items-start justify-center  relative">
       {/* Phone Body */}
       <div className="relative w-[300px] h-[620px] dark:bg-black/70 bg-black/80 rounded-[50px] shadow-2xl p-[10px]">
         {/* Screen */}

@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
@@ -18,21 +17,46 @@ import {
   SelectContent,
   SelectTrigger,
 } from "@/src/components/ui/select";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/src/components/ui/tabs";
 import { Separator } from "@/src/components/ui/separator";
-import { Switch } from "@/src/components/ui/switch";
-import { Textarea } from "@/src/components/ui/textarea";
+
 import { cn } from "@/src/lib/utils";
 import { useTRPC } from "@/src/trpc/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { X } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, SendIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AllAutomationList } from "./AllAutomations";
 import { InstagramMedia } from "@/types/types";
-import Iphone from "./Iphone";
-import IphoneComment from "./IphoneComment";
+import Iphone from "@/src/components/Iphone";
+import IphoneComment from "@/src/components/IphoneComment";
+import IphoneHome from "@/src/components/IphoneHome";
+import IphoneMessage from "@/src/components/IphoneMessage";
+import DMInput from "./DMInput";
+import LinkSwitch from "./LinkSwitch";
+import LinkDM from "./LinkDM";
+import FollowSwitch from "./FollowSwitch";
+import FollowMessage from "./FollowMessage";
+import CommentInput from "./CommentInput";
+
+const ACTIONS: { title: string; value: string }[] = [
+  { title: "Send DM", value: "SEND_DM" },
+  { title: "Reply to Comment", value: "REPLY_COMMENT" },
+  { title: "Reply to Comment and Send DM", value: "REPLY_COMMENT_SEND_DM" },
+];
+
+const TABS_LIST: { title: string; value: string }[] = [
+  { title: "Home", value: "home" },
+  { title: "Comment", value: "comment" },
+  { title: "DM", value: "dm" },
+];
 
 export default function AutomationEdit({
   automation,
@@ -53,6 +77,8 @@ export default function AutomationEdit({
   const [keywords, setKeywords] = useState<string[]>([]);
   // Message To Send in DM
   const [message, setMessage] = useState("");
+
+  const [addLink, setAddLink] = useState(false);
   // Action
   const [action, setAction] = useState("REPLY_COMMENT");
   // Comment To Reply to the comment
@@ -96,11 +122,13 @@ export default function AutomationEdit({
           askForFollow: boolean;
           followMessage: string;
         };
+
         if (meta) {
           setLink(meta.link);
           setLinkText(meta.linkText);
           setAskForFollow(meta.askForFollow);
           setFollowMessage(meta.followMessage);
+          setAddLink(meta.link ? true : false);
         }
       } else if (automation.actions.length == 1) {
         setAction(automation.actions[0]?.type as "SEND_DM" | "REPLY_COMMENT");
@@ -120,6 +148,7 @@ export default function AutomationEdit({
             setLinkText(meta.linkText);
             setAskForFollow(meta.askForFollow);
             setFollowMessage(meta.followMessage);
+            setAddLink(meta?.link?.length > 0 ? true : false);
           }
         }
       }
@@ -232,423 +261,369 @@ export default function AutomationEdit({
     setKeywords((prev) => prev.filter((k) => k !== keyword));
   };
 
+  // for steps
+  const [step, setStep] = useState(1);
+  const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
+  const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex flex-row justify-between gap-2">
-        <Input
-          type="text"
-          className="w-full md:w-2/3 "
-          placeholder="Enter Automation Name"
-          value={automationName}
-          required
-          aria-required="true"
-          autoFocus
-          onChange={(e) => setAutomationName(e.target.value)}
-        />
-      </div>
-      <Separator />
-      <div className="grid grid-cols-1 gap-4 align-baseline">
-        <Card>
-          <CardContent>
-            <CardTitle className="text-xl font-semibold mb-4">
-              When someone comments on this post:
-            </CardTitle>
-            <div className="flex gap-4">
-              <Image
-                src={
-                  mediaData.media_type === "VIDEO"
-                    ? mediaData.thumbnail_url
-                    : mediaData.media_url
-                }
-                alt="Automation Image"
-                width={150}
-                height={100}
-                className="rounded-lg object-cover border-2 p-px border-gray-200 aspect-square"
-                loading="eager"
-              />
-              <div className="flex flex-col gap-2">
-                <CardDescription className="text-muted-foreground line-clamp-3 max-w-2xl">
-                  {mediaData.caption}
-                </CardDescription>
-                <CardDescription className=" text-muted-foreground">
-                  @{mediaData.username}
-                </CardDescription>
-              </div>
-            </div>
-            <Separator className="my-4" />
-            <CardTitle className="text-lg text-center font-semibold mb-4">
-              Setup Automation
-            </CardTitle>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader className="text-center font-semibold">
-                  Configure Automation
-                </CardHeader>
-                <CardContent>
+      <Card>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start justify-start">
+            <Card>
+              <CardContent>
+                {step === 1 && (
                   <div>
-                    <div className="flex flex-col gap-2">
-                      {!automation.targetMediaId ? (
-                        <>
-                          <CardDescription className=" text-muted-foreground font-semibold">
-                            <TooltipHelp
-                              title="Select what action will activate this automation.
-Example: If “Comment” is selected, the automation will run when someone comments on your post."
-                            >
-                              Trigger Type
-                            </TooltipHelp>
-                          </CardDescription>
-                          <Select
-                            value={
-                              automation.targetMediaId ? "COMMENT" : triggerType
-                            }
-                            onValueChange={(value) =>
-                              setTriggerType(value as "COMMENT" | "DM")
-                            }
-                            disabled={!!automation.targetMediaId}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select Trigger Type" />
-                            </SelectTrigger>
-                            <SelectContent className="p-2 w-full">
-                              <SelectItem value="COMMENT">Comment</SelectItem>
-                              <SelectItem value="DM">DM</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {!automation.targetMediaId ? (
-                            <CardDescription className=" text-yellow-500 text-xs">
-                              Choose how this automation starts. For media, only
-                              comments can trigger automation.
-                            </CardDescription>
-                          ) : null}
-                          <Separator className="my-2" />
-                        </>
-                      ) : null}
-                      <CardDescription className=" text-muted-foreground">
-                        <TooltipHelp
-                          title="Define words that users must type in their comment to trigger this automation.
-Example: If you add “price”, automation will run when someone comments “price” or “Price”. If empty, any comment will trigger the automation."
-                        >
-                          Trigger Keywords (Case Insensitive)
-                        </TooltipHelp>
-                      </CardDescription>
-                      <div className="flex items-center gap-2 flex-row">
-                        {keywords.map((keyword) => (
-                          <Badge
-                            key={keyword}
-                            // variant="outline"
-                            onClick={() => removeKeyword(keyword)}
-                            className="cursor-pointer  relative pr-6"
-                          >
-                            {keyword}
-                            <X className="w-5 h-5 font-semibold  absolute top-1/2 -translate-y-1/2 right-1 text-red-500" />
-                          </Badge>
-                        ))}
-                      </div>
-                      <Input
-                        type="text"
-                        className={cn(
-                          "w-full",
-                          keywords.length >= 3
-                            ? "opacity-50 cursor-not-allowed"
-                            : "",
-                        )}
-                        placeholder="Enter keywords (press Enter to add)"
-                        value={input}
-                        disabled={keywords.length >= 3}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => setInput(e.target.value)}
-                        // onChange={(e) => setTriggerKeyword(e.target.value)}
-                      />
-                      <CardDescription className="text-muted-foreground">
-                        💡 Add up to 3 keywords. Automation will trigger when a
-                        comment contains any of these words, if no keywords are
-                        added, any comment will trigger the automation.
-                      </CardDescription>
-                      {keywords.length >= 3 && (
-                        <CardDescription className="text-yellow-500 text-xs">
-                          Maximum 3 keywords can be added, you can add more by
-                          removing some.
-                        </CardDescription>
-                      )}
-                      <Separator className="my-4" />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <CardDescription className=" text-muted-foreground">
-                        <TooltipHelp title="Choose what should happen when the automation is triggered.">
-                          Automation Action
-                        </TooltipHelp>
-                      </CardDescription>
-                      <Select
-                        value={action}
-                        onValueChange={(value) =>
-                          setAction(
-                            value as
-                              | "SEND_DM"
-                              | "REPLY_COMMENT"
-                              | "REPLY_COMMENT_SEND_DM",
-                          )
-                        }
-                      >
-                        <SelectTrigger className="w-full cursor-pointer">
-                          <SelectValue placeholder="Select Action" />
-                        </SelectTrigger>
-                        <SelectContent className="p-2 w-full ">
-                          <SelectItem
-                            value="SEND_DM"
-                            className="cursor-pointer"
-                          >
-                            Send DM
-                          </SelectItem>
-                          <SelectItem
-                            value="REPLY_COMMENT"
-                            className="cursor-pointer"
-                          >
-                            Reply to Comment
-                          </SelectItem>
-                          <SelectItem
-                            value="REPLY_COMMENT_SEND_DM"
-                            className="cursor-pointer"
-                          >
-                            Reply to Comment and Send DM
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-
-                      {/* Action: Send DM */}
-
-                      {action === "SEND_DM" && (
-                        <>
-                          <div>
-                            <CardDescription className="text-muted-foreground mt-2">
-                              <TooltipHelp title="The message that will be sent when the automation is triggered.">
-                                Private Message
-                              </TooltipHelp>
-                            </CardDescription>
-                            <Textarea
-                              className="w-full mt-2"
-                              placeholder="Hi there! Thanks for commenting 😊. Here’s the offer 🎉  ..."
-                              value={message}
-                              onChange={(e) => setMessage(e.target.value)}
-                            />
-                          </div>
-                          <div>
-                            <CardDescription className="font-semibold text-muted-foreground mt-2">
-                              <TooltipHelp title="Add a link to your message. Which will be displayed as a button in the DM. Link will be sent in the DM to the user with private message.">
-                                Add Link To The Private Message
-                              </TooltipHelp>
-                            </CardDescription>
-                            <div>
-                              <Input
-                                type="url"
-                                className="w-full mt-2"
-                                placeholder="https://example.com"
-                                value={link}
-                                onChange={(e) => setLink(e.target.value)}
-                              />
-                              <CardDescription className="font-semibold text-muted-foreground mt-4">
-                                <TooltipHelp title="The text that will be displayed as the link. Example: “Click here to get the offer”">
-                                  Link Text (Optional)
-                                </TooltipHelp>
-                              </CardDescription>
-                              <Input
-                                type="text"
-                                className="w-full mt-2"
-                                placeholder="Ex: Claim Now"
-                                value={linkText}
-                                onChange={(e) => setLinkText(e.target.value)}
-                              />
-                            </div>
-                            <Separator className="my-4" />
-                            <div className="flex flex-col gap-2 my-3">
-                              <div className="flex items-center gap-2">
-                                <Switch
-                                  checked={askForFollow}
-                                  onCheckedChange={setAskForFollow}
-                                  className="data-checked:bg-blue-500 data-checked:hover:bg-blue-600 cursor-pointer "
-                                />
-                                <CardDescription className="font-semibold text-muted-foreground">
-                                  <TooltipHelp title="Ask users to follow your account before receiving the DM. If enabled, the user will be asked to follow your account before receiving the DM. If disabled, the user will not be asked to follow your account before receiving the DM.">
-                                    Require Follow Before Sending DM (Link)
-                                  </TooltipHelp>
-                                </CardDescription>
-                              </div>
-                              {askForFollow && (
-                                <div>
-                                  <CardDescription className="font-semibold text-muted-foreground my-2">
-                                    <TooltipHelp title="The message that will be sent when the user is asked to follow your account before receiving the DM. Example: “Follow us on Instagram to get the offer 🎉”">
-                                      Follow Message (Required)
-                                    </TooltipHelp>
-                                  </CardDescription>
-                                  <Textarea
-                                    required
-                                    aria-required="true"
-                                    className="w-full mt-2"
-                                    placeholder="Follow us on Instagram to get the offer 🎉"
-                                    value={followMessage}
-                                    onChange={(e) =>
-                                      setFollowMessage(e.target.value)
-                                    }
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      )}
-                      {/* Action: Reply to Comment */}
-                      {action === "REPLY_COMMENT" && (
-                        <div>
-                          <CardDescription className=" text-muted-foreground my-2">
-                            <TooltipHelp
-                              title="This is the reply users will see on your post.
-Keep it short and engaging. Example: “Thanks! Check your DM 😊”"
-                            >
-                              Public Reply To Comment
-                            </TooltipHelp>
-                          </CardDescription>
-                          <Textarea
-                            className="w-full mt-2"
-                            placeholder="Thank you for your comment 😊"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                          />
-                        </div>
-                      )}
-                      {/* Action: Reply to Comment and Send DM */}
-                      {action === "REPLY_COMMENT_SEND_DM" && (
-                        <div className="flex flex-col gap-2">
-                          <div>
-                            <CardDescription className="font-semibold text-muted-foreground my-2">
-                              <TooltipHelp
-                                title="This is the reply users will see on your post.
-Keep it short and engaging. Example: “Thanks! Check your DM 😊”"
-                              >
-                                Public Reply To Comment
-                              </TooltipHelp>
-                            </CardDescription>
-                            <Textarea
-                              className="w-full mt-2"
-                              placeholder="Thanks! Check your DM 😊"
-                              value={comment}
-                              onChange={(e) => setComment(e.target.value)}
-                            />
-                          </div>
-                          <div>
-                            <CardDescription className="font-semibold text-muted-foreground my-2">
-                              <TooltipHelp
-                                title="This is the message users will receive in their DM.
-Example: “Hi there! Thanks for commenting 😊. Here’s the offer 🎉: ”"
-                              >
-                                Private Message
-                              </TooltipHelp>
-                            </CardDescription>
-
-                            <Textarea
-                              className="w-full mt-2"
-                              placeholder="Hi there! Thanks for commenting 😊. Here’s the offer 🎉  ..."
-                              value={message}
-                              onChange={(e) => setMessage(e.target.value)}
-                            />
-                          </div>
-                          <div>
-                            <CardDescription className="font-semibold text-muted-foreground my-2">
-                              <TooltipHelp title="Add a link to your message. Which will be displayed as a button in the DM. Link will be sent in the DM to the user with private message.">
-                                Add Link To The Private Message
-                              </TooltipHelp>
-                            </CardDescription>
-                            <div>
-                              <Input
-                                type="url"
-                                className="w-full mt-2"
-                                placeholder="https://example.com"
-                                value={link}
-                                onChange={(e) => setLink(e.target.value)}
-                              />
-                              <CardDescription className="font-semibold text-muted-foreground mt-3">
-                                <TooltipHelp title="The text that will be displayed as the link. Example: “Click here to get the offer”">
-                                  Link Text
-                                </TooltipHelp>
-                              </CardDescription>
-                              <Input
-                                type="text"
-                                className="w-full mt-2"
-                                placeholder="Ex: Click here to get the offer"
-                                value={linkText}
-                                onChange={(e) => setLinkText(e.target.value)}
-                              />
-                            </div>
-                            <Separator className="my-4" />
-                            <div className="flex flex-col gap-2 my-3">
-                              <div className="flex items-center gap-2">
-                                <Switch
-                                  checked={askForFollow}
-                                  onCheckedChange={setAskForFollow}
-                                  className="data-checked:bg-blue-500 data-checked:hover:bg-blue-600 cursor-pointer "
-                                />
-                                <CardDescription className="font-semibold text-muted-foreground">
-                                  <TooltipHelp title="Ask users to follow your account before receiving the DM. If enabled, the user will be asked to follow your account before receiving the DM. If disabled, the user will not be asked to follow your account before receiving the DM.">
-                                    Require Follow Before Sending DM (Link)
-                                  </TooltipHelp>
-                                </CardDescription>
-                              </div>
-                              {askForFollow && (
-                                <div>
-                                  <CardDescription className="font-semibold text-muted-foreground my-2">
-                                    <TooltipHelp title="The message that will be sent when the user is asked to follow your account before receiving the DM. Example: “Follow us on Instagram to get the offer 🎉”">
-                                      Follow Message
-                                    </TooltipHelp>
-                                  </CardDescription>
-                                  <Textarea
-                                    className="w-full mt-2"
-                                    placeholder="Follow us on Instagram to get the offer 🎉"
-                                    value={followMessage}
-                                    onChange={(e) =>
-                                      setFollowMessage(e.target.value)
-                                    }
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      <Button
-                        type="submit"
-                        variant="default"
-                        className="w-full mt-4"
-                      >
-                        Update Automation
-                      </Button>
-                    </div>
-                    <Separator className="my-4" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <div>
-                <Card>
-                  <CardContent>
-                    <Iphone>
-                      {/* <IphoneHome posts={mediaData} /> */}
-                      <IphoneComment
-                        username={mediaData.username}
-                        postImage={
+                    <CardTitle className="text-xl font-semibold mb-4">
+                      When someone comments on this post:
+                    </CardTitle>
+                    <div className="flex gap-4">
+                      <Image
+                        src={
                           mediaData.media_type === "VIDEO"
                             ? mediaData.thumbnail_url
                             : mediaData.media_url
                         }
-                        commentMessage={comment}
-                        commentKeyword={keywords[0]}
+                        alt="Automation Image"
+                        width={150}
+                        height={100}
+                        className="rounded-lg object-cover border-2 p-px border-gray-200 aspect-square"
+                        loading="eager"
                       />
-                    </Iphone>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                      <div className="flex flex-col gap-2">
+                        <CardDescription className=" line-clamp-3  max-w-2xl">
+                          {mediaData.caption}
+                        </CardDescription>
+                        <CardDescription className=" text-muted-foreground">
+                          @{mediaData.username}
+                        </CardDescription>
+                      </div>
+                    </div>
+                    <Separator className="my-4" />
+
+                    {/* Keywords UI (same as your existing code) */}
+                    {mediaData.id ? (
+                      <div className="flex flex-col gap-2">
+                        <CardDescription className=" text-muted-foreground font-semibold text-[17px]">
+                          <TooltipHelp
+                            title="Define words that users must type in their comment to trigger this automation.
+Example: If you add “price”, automation will run when someone comments “price” or “Price”. If empty, any comment will trigger the automation."
+                          >
+                            And comment contains any of these keywords (Case
+                            Insensitive)
+                          </TooltipHelp>
+                        </CardDescription>
+                        <div className="flex items-center gap-2 flex-row">
+                          {keywords.map((keyword) => (
+                            <Badge
+                              key={keyword}
+                              // variant="outline"
+                              onClick={() => removeKeyword(keyword)}
+                              className="cursor-pointer  relative pr-6"
+                            >
+                              {keyword}
+                              <X className="w-5 h-5 font-semibold  absolute top-1/2 -translate-y-1/2 right-1 text-red-500" />
+                            </Badge>
+                          ))}
+                        </div>
+                        <Input
+                          type="text"
+                          className={cn(
+                            "w-full",
+                            keywords.length >= 3
+                              ? "opacity-50 cursor-not-allowed"
+                              : "",
+                          )}
+                          placeholder="Enter keywords (press Enter to add)"
+                          value={input}
+                          disabled={keywords.length >= 3}
+                          onKeyDown={handleKeyDown}
+                          onChange={(e) => setInput(e.target.value)}
+                          // onChange={(e) => setTriggerKeyword(e.target.value)}
+                        />
+                        <CardDescription className="text-muted-foreground">
+                          💡 Add up to 3 keywords. Automation will trigger when
+                          a comment contains any of these words, if no keywords
+                          are added, any comment will trigger the automation.
+                        </CardDescription>
+                        {keywords.length >= 3 && (
+                          <CardDescription className="text-yellow-500 text-xs">
+                            Maximum 3 keywords can be added, you can add more by
+                            removing some.
+                          </CardDescription>
+                        )}
+                        <Separator className="my-4" />
+                      </div>
+                    ) : null}
+                    <Button
+                      onClick={nextStep}
+                      className="mt-4 w-full flex items-center gap-2"
+                    >
+                      Next <ArrowRightIcon className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+                {step === 2 && (
+                  <div>
+                    <div>
+                      <div className="flex flex-col gap-2">
+                        <CardDescription className=" text-muted-foreground font-semibold text-[17px] mb-2">
+                          <TooltipHelp title="Choose what should happen when the automation is triggered.">
+                            Then perform this action:
+                          </TooltipHelp>
+                        </CardDescription>
+                        <Select
+                          value={action}
+                          onValueChange={(value) =>
+                            setAction(
+                              value as
+                                | "SEND_DM"
+                                | "REPLY_COMMENT"
+                                | "REPLY_COMMENT_SEND_DM",
+                            )
+                          }
+                        >
+                          <SelectTrigger className="w-full cursor-pointer">
+                            <SelectValue placeholder="Select Action" />
+                          </SelectTrigger>
+                          <SelectContent className="p-2 w-full ">
+                            {ACTIONS.map((action) => (
+                              <SelectItem
+                                value={action.value}
+                                key={action.value}
+                                className="cursor-pointer"
+                              >
+                                {action.title}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        {/* Action: Send DM */}
+
+                        {action === "SEND_DM" && (
+                          <>
+                            <DMInput
+                              message={message || ""}
+                              setMessage={(value) => setMessage(value)}
+                            />
+                            <div>
+                              {/* Switch for link */}
+
+                              <LinkSwitch
+                                addLink={addLink}
+                                setAddLink={setAddLink}
+                              />
+
+                              {addLink && (
+                                <LinkDM
+                                  link={link}
+                                  setLink={(value) => setLink(value)}
+                                  linkText={linkText || ""}
+                                  setLinkText={(value) => setLinkText(value)}
+                                />
+                              )}
+                              <div className="flex flex-col gap-2 my-3">
+                                <FollowSwitch
+                                  askForFollow={askForFollow}
+                                  setAskForFollow={setAskForFollow}
+                                />
+                                {askForFollow && (
+                                  <FollowMessage
+                                    followMessage={followMessage || ""}
+                                    setFollowMessage={(value) =>
+                                      setFollowMessage(value)
+                                    }
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        {/* Action: Reply to Comment */}
+                        {action === "REPLY_COMMENT" && (
+                          <CommentInput
+                            comment={comment || ""}
+                            setComment={(value) => setComment(value)}
+                          />
+                        )}
+                        {/* Action: Reply to Comment and Send DM */}
+                        {action === "REPLY_COMMENT_SEND_DM" && (
+                          <div className="flex flex-col gap-2">
+                            <CommentInput
+                              comment={comment || ""}
+                              setComment={(value) => setComment(value)}
+                            />
+                            <DMInput
+                              message={message || ""}
+                              setMessage={(value) => setMessage(value)}
+                            />
+                            <div>
+                              {/* Switch for link */}
+
+                              <LinkSwitch
+                                addLink={addLink}
+                                setAddLink={setAddLink}
+                              />
+
+                              {addLink && (
+                                <LinkDM
+                                  link={link}
+                                  setLink={(value) => setLink(value)}
+                                  linkText={linkText || ""}
+                                  setLinkText={(value) => setLinkText(value)}
+                                />
+                              )}
+
+                              <div className="flex flex-col gap-2 my-3">
+                                <FollowSwitch
+                                  askForFollow={askForFollow}
+                                  setAskForFollow={setAskForFollow}
+                                />
+                                {askForFollow && (
+                                  <FollowMessage
+                                    followMessage={followMessage || ""}
+                                    setFollowMessage={(value) =>
+                                      setFollowMessage(value)
+                                    }
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-6 justify-between">
+                      <Button
+                        variant="outline"
+                        onClick={prevStep}
+                        className="w-fit flex-1/2"
+                      >
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        Back
+                      </Button>
+                      <Button
+                        onClick={nextStep}
+                        className="w-fit flex-1/2"
+                        disabled={!action}
+                      >
+                        Next <ArrowRightIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                {step === 3 && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 mb-4">
+                      <CardDescription className="text-muted-foreground text-lg font-semibold">
+                        Automation Name <span className="text-red-500">*</span>
+                      </CardDescription>
+                      <Input
+                        type="text"
+                        className="w-full md:w-2/3 "
+                        placeholder="Enter Automation Name"
+                        value={automationName}
+                        required
+                        aria-required="true"
+                        autoFocus
+                        onChange={(e) => setAutomationName(e.target.value)}
+                      />
+                    </div>
+                    <p className="text-muted-foreground text-lg">
+                      <b className="text-muted-foreground">Name:</b>{" "}
+                      {automationName}
+                    </p>
+                    <p className="text-muted-foreground text-lg">
+                      <b className="text-muted-foreground">Trigger:</b>{" "}
+                      {triggerType}
+                    </p>
+                    <p className="text-muted-foreground text-lg">
+                      <b className="text-muted-foreground">Keywords:</b>{" "}
+                      {keywords.join(", ") ||
+                        "Automation will run on each unique comment "}
+                    </p>
+                    <p className="text-muted-foreground text-lg">
+                      <b className="text-muted-foreground">Action:</b> {action}
+                    </p>
+
+                    {/* Optional: show message/comment preview */}
+
+                    <div className="flex gap-2 mt-4">
+                      <Button
+                        className="w-fit  flex-1"
+                        variant="outline"
+                        onClick={prevStep}
+                      >
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        Back
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="default"
+                        className="w-fit flex-1/2"
+                      >
+                        Publish Automation
+                        <SendIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            <Tabs className="flex flex-col items-center justify-center mx-auto md:w-1/2 w-full">
+              <TabsContent value="home">
+                <Iphone>
+                  <IphoneHome
+                    username={mediaData.username || ""}
+                    imageUrl={
+                      mediaData.media_type === "VIDEO"
+                        ? mediaData.thumbnail_url
+                        : mediaData.media_url || ""
+                    }
+                    caption={mediaData.caption || ""}
+                  />
+                </Iphone>
+              </TabsContent>
+              <TabsContent value="comment">
+                <Iphone>
+                  <IphoneComment
+                    username={mediaData.username || ""}
+                    postImage={
+                      mediaData.media_type === "VIDEO"
+                        ? mediaData.thumbnail_url
+                        : mediaData.media_url || ""
+                    }
+                    commentMessage={comment || ""}
+                    commentKeyword={keywords.join(", ") || "Any"}
+                  />
+                </Iphone>
+              </TabsContent>
+              <TabsContent value="dm">
+                <Iphone>
+                  <IphoneMessage
+                    message={message || ""}
+                    linkText={linkText || ""}
+                    link={addLink}
+                  />
+                </Iphone>
+              </TabsContent>
+              <TabsList className="w-full rounded-full mt-5 shadow-md p-6">
+                {TABS_LIST.map((tab) => (
+                  <TabsTrigger
+                    value={tab.value}
+                    key={tab.value}
+                    className="rounded-full p-4"
+                  >
+                    {tab.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        </CardContent>
+      </Card>
     </form>
   );
 }
