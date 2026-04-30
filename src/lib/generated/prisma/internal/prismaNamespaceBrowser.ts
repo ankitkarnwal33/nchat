@@ -61,14 +61,7 @@ export const ModelName = {
   Action: 'Action',
   AutomationLog: 'AutomationLog',
   PendingAutomation: 'PendingAutomation',
-  UserInteraction: 'UserInteraction',
-  Contact: 'Contact',
-  Conversation: 'Conversation',
-  Message: 'Message',
-  WhatsAppAccount: 'WhatsAppAccount',
-  WhatsAppTemplate: 'WhatsAppTemplate',
-  Campaign: 'Campaign',
-  CampaignContact: 'CampaignContact'
+  UserInteraction: 'UserInteraction'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -237,112 +230,6 @@ export const UserInteractionScalarFieldEnum = {
 export type UserInteractionScalarFieldEnum = (typeof UserInteractionScalarFieldEnum)[keyof typeof UserInteractionScalarFieldEnum]
 
 
-export const ContactScalarFieldEnum = {
-  id: 'id',
-  platform: 'platform',
-  externalId: 'externalId',
-  name: 'name',
-  username: 'username',
-  phone: 'phone',
-  profilePicture: 'profilePicture',
-  isVerified: 'isVerified',
-  importSource: 'importSource',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  instagramAccountId: 'instagramAccountId',
-  whatsappAccountId: 'whatsappAccountId'
-} as const
-
-export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
-
-
-export const ConversationScalarFieldEnum = {
-  id: 'id',
-  contactId: 'contactId',
-  platform: 'platform',
-  lastMessageAt: 'lastMessageAt',
-  lastMessagePreview: 'lastMessagePreview',
-  unreadCount: 'unreadCount',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  instagramAccountId: 'instagramAccountId',
-  whatsappAccountId: 'whatsappAccountId'
-} as const
-
-export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
-
-
-export const MessageScalarFieldEnum = {
-  id: 'id',
-  conversationId: 'conversationId',
-  externalMessageId: 'externalMessageId',
-  direction: 'direction',
-  content: 'content',
-  meta: 'meta',
-  mediaUrl: 'mediaUrl',
-  mediaType: 'mediaType',
-  templateId: 'templateId',
-  sentAt: 'sentAt',
-  isRead: 'isRead'
-} as const
-
-export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
-
-
-export const WhatsAppAccountScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  phoneNumberId: 'phoneNumberId',
-  wabaId: 'wabaId',
-  accessToken: 'accessToken',
-  displayName: 'displayName',
-  createdAt: 'createdAt'
-} as const
-
-export type WhatsAppAccountScalarFieldEnum = (typeof WhatsAppAccountScalarFieldEnum)[keyof typeof WhatsAppAccountScalarFieldEnum]
-
-
-export const WhatsAppTemplateScalarFieldEnum = {
-  id: 'id',
-  whatsappAccountId: 'whatsappAccountId',
-  name: 'name',
-  language: 'language',
-  category: 'category',
-  components: 'components',
-  status: 'status',
-  externalId: 'externalId',
-  createdAt: 'createdAt'
-} as const
-
-export type WhatsAppTemplateScalarFieldEnum = (typeof WhatsAppTemplateScalarFieldEnum)[keyof typeof WhatsAppTemplateScalarFieldEnum]
-
-
-export const CampaignScalarFieldEnum = {
-  id: 'id',
-  whatsappAccountId: 'whatsappAccountId',
-  name: 'name',
-  templateId: 'templateId',
-  status: 'status',
-  scheduledAt: 'scheduledAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
-
-
-export const CampaignContactScalarFieldEnum = {
-  id: 'id',
-  campaignId: 'campaignId',
-  contactId: 'contactId',
-  status: 'status',
-  sentAt: 'sentAt',
-  error: 'error'
-} as const
-
-export type CampaignContactScalarFieldEnum = (typeof CampaignContactScalarFieldEnum)[keyof typeof CampaignContactScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -357,13 +244,6 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

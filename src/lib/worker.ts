@@ -198,7 +198,8 @@ export const instagramSendCommentWorker = new Worker(
         comment_author_id,
         createAndUpdateLog,
       } = data;
-      const { allowed, waitMs } = await acquireToken(instagramUserId);
+      // Instagram rate limit is 195 public replies per 3600 seconds
+      const { allowed, waitMs } = await acquireToken(instagramUserId, 195);
 
       if (!allowed) {
         // Don't fail — re-queue with exact delay until next token
@@ -342,6 +343,20 @@ export const instagramSendDMWorker = new Worker(
           return;
         }
       }
+
+      // Instagram rate limit is 750 private replies per 3600 seconds
+      const { allowed, waitMs } = await acquireToken(instagramUserId, 745); // 745 is for the buffer
+
+      if (!allowed) {
+        // Don't fail — re-queue with exact delay until next token
+        await instagramSendDMQueue.add("instagram_send_dm_queue", job.data, {
+          delay: waitMs + 100, // +100ms buffer
+          priority: job.opts.priority,
+          jobId: `retry-${job.id}`, // idempotent
+        });
+        return; // job completes successfully, no retry count incremented
+      }
+
       const accessToken = await prisma.instagramAccount.findUnique({
         where: {
           instagramUserId,

@@ -23,7 +23,6 @@ model User {
   sessions      Session[]
   accounts      Account[]
   instagramAccounts InstagramAccount[]
-  whatsappAccounts WhatsAppAccount[]
   automations Automation[]
   @@unique([email])
   @@map("user")
@@ -43,8 +42,6 @@ model InstagramAccount {
 
   createdAt       DateTime @default(now())
   automations Automation[]
-  contacts Contact[]
-  conversations Conversation[]
 
   @@index([instagramUserId])
 }
@@ -115,7 +112,7 @@ model Automation {
 
   user            User @relation(fields: [userId], references: [id])
   account         InstagramAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  pendingAutomations PendingAutomation[]
+  pendingAutomations PendingAutomation[] 
   triggers        Trigger[]
   actions         Action[]
 
@@ -194,7 +191,7 @@ model PendingAutomation {
 
   status            PendingStatus
 
-  automation        Automation @relation(fields: [automationId], references: [id])
+  automation        Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -220,151 +217,4 @@ model UserInteraction {
   @@index([accountId])
 }
 
-
-enum Platform {
-  INSTAGRAM
-  WHATSAPP
-}
-
-enum MessageDirection {
-  INBOUND
-  OUTBOUND
-}
-
-// Channel-agnostic contact. One row per person per platform account.
-model Contact {
-  id              String    @id @default(cuid())
-  platform        Platform
-  externalId      String    // IG user ID or WA phone number
-  name            String?
-  username        String?   // Instagram
-  phone           String?   // WhatsApp
-  profilePicture  String?
-  isVerified      Boolean   @default(false)
-  importSource    String?   // "automation" | "csv" | "xlsx"
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  // platform-specific account links (only one set per row)
-  instagramAccountId String?
-  instagramAccount   InstagramAccount? @relation(fields: [instagramAccountId], references: [instagramUserId], onDelete: Cascade)
-  whatsappAccountId  String?
-  whatsappAccount    WhatsAppAccount?  @relation(fields: [whatsappAccountId], references: [id], onDelete: Cascade)
-
-  conversations   Conversation[]
-  campaignContacts CampaignContact[]
-
-  @@unique([externalId, instagramAccountId])
-  @@unique([externalId, whatsappAccountId])
-  @@index([instagramAccountId])
-  @@index([whatsappAccountId])
-}
-
-// One conversation per Contact+Account pair. Groups all messages.
-model Conversation {
-  id                 String    @id @default(cuid())
-  contactId          String
-  contact            Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  platform           Platform
-  lastMessageAt      DateTime?
-  lastMessagePreview String?
-  unreadCount        Int       @default(0)
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-
-  instagramAccountId String?
-  instagramAccount   InstagramAccount? @relation(fields: [instagramAccountId], references: [instagramUserId], onDelete: Cascade)
-  whatsappAccountId  String?
-  whatsappAccount    WhatsAppAccount?  @relation(fields: [whatsappAccountId], references: [id], onDelete: Cascade)
-
-  messages           Message[]
-
-  @@unique([contactId, instagramAccountId])
-  @@unique([contactId, whatsappAccountId])
-  @@index([instagramAccountId, lastMessageAt(sort: Desc)])
-  @@index([whatsappAccountId, lastMessageAt(sort: Desc)])
-}
-
-model Message {
-  id                String           @id @default(cuid())
-  conversationId    String
-  conversation      Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  externalMessageId String?          @unique  // IG or WA message ID for idempotency
-  direction         MessageDirection
-  content           String?
-  meta              Json?
-  mediaUrl          String?
-  mediaType         String?
-  templateId        String?          // WA template reference
-  sentAt            DateTime         @default(now())
-  isRead            Boolean          @default(false)
-
-  @@index([conversationId, sentAt])
-}
-
-
-//  Whatsapp integration (future feature)
-
-model WhatsAppAccount {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  phoneNumberId   String   @unique  // WA Business API phone number ID
-  wabaId          String            // WhatsApp Business Account ID
-  accessToken     String
-  displayName     String?
-  createdAt       DateTime @default(now())
-
-  contacts        Contact[]
-  conversations   Conversation[]
-  templates       WhatsAppTemplate[]
-  campaigns       Campaign[]
-}
-
-model WhatsAppTemplate {
-  id              String   @id @default(cuid())
-  whatsappAccountId String
-  whatsappAccount WhatsAppAccount @relation(fields: [whatsappAccountId], references: [id], onDelete: Cascade)
-  name            String
-  language        String
-  category        String           // MARKETING | UTILITY | AUTHENTICATION
-  components      Json             // header, body, footer, buttons
-  status          String           // APPROVED | PENDING | REJECTED
-  externalId      String?          // WA template ID
-  createdAt       DateTime @default(now())
-}
-
-enum CampaignStatus {
-  DRAFT
-  RUNNING
-  COMPLETED
-  FAILED
-}
-
-model Campaign {
-  id                String         @id @default(cuid())
-  whatsappAccountId String
-  whatsappAccount   WhatsAppAccount @relation(fields: [whatsappAccountId], references: [id], onDelete: Cascade)
-  name              String
-  templateId        String?
-  status            CampaignStatus @default(DRAFT)
-  scheduledAt       DateTime?
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-
-  campaignContacts  CampaignContact[]
-}
-
-model CampaignContact {
-  id          String   @id @default(cuid())
-  campaignId  String
-  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  contactId   String
-  contact     Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  status      String   // pending | sent | delivered | read | failed
-  sentAt      DateTime?
-  error       String?
-
-  @@unique([campaignId, contactId])
-}
 

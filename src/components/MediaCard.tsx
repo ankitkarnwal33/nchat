@@ -76,7 +76,7 @@ export default function MediaCard({ media }: { media: InstagramMedia }) {
             onClick={() => {
               setOpen(false);
             }}
-            className="transition-colors w-full py-1 text-xs bg-primary/80 rounded-md shadow-sm hover:shadow-md font-medium text-center flex items-center justify-center "
+            className="transition-colors w-full py-2 text-sm bg-primary/80 rounded-md shadow-sm hover:shadow-md font-medium text-center flex items-center justify-center "
           >
             <PlusIcon className="w-4 h-4" />
             Create Automation

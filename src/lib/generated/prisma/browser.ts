@@ -72,38 +72,3 @@ export type PendingAutomation = Prisma.PendingAutomationModel
  * 
  */
 export type UserInteraction = Prisma.UserInteractionModel
-/**
- * Model Contact
- * 
- */
-export type Contact = Prisma.ContactModel
-/**
- * Model Conversation
- * 
- */
-export type Conversation = Prisma.ConversationModel
-/**
- * Model Message
- * 
- */
-export type Message = Prisma.MessageModel
-/**
- * Model WhatsAppAccount
- * 
- */
-export type WhatsAppAccount = Prisma.WhatsAppAccountModel
-/**
- * Model WhatsAppTemplate
- * 
- */
-export type WhatsAppTemplate = Prisma.WhatsAppTemplateModel
-/**
- * Model Campaign
- * 
- */
-export type Campaign = Prisma.CampaignModel
-/**
- * Model CampaignContact
- * 
- */
-export type CampaignContact = Prisma.CampaignContactModel

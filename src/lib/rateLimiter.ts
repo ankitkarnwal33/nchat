@@ -27,11 +27,12 @@ end
 
 export async function acquireToken(
   accountId: string,
+  capacity: number,
 ): Promise<{ allowed: boolean; waitMs: number }> {
-  // Instagram rate limit is 195 private replies per 3600 seconds
+  // Instagram rate limit is 195 public replies and 750 for private replies per 3600 seconds
   const result = (await redis.eval(RATE_LIMIT_LUA, {
     keys: [`rate:ig:${accountId}`],
-    arguments: ["195", String(195 / 3600), String(Date.now())],
+    arguments: [`${capacity}`, String(capacity / 3600), String(Date.now())],
   })) as [number, number];
   return { allowed: result[0] === 1, waitMs: result[1] };
 }

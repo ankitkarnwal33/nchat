@@ -40,29 +40,3 @@ export const PendingStatus = {
 } as const
 
 export type PendingStatus = (typeof PendingStatus)[keyof typeof PendingStatus]
-
-
-export const Platform = {
-  INSTAGRAM: 'INSTAGRAM',
-  WHATSAPP: 'WHATSAPP'
-} as const
-
-export type Platform = (typeof Platform)[keyof typeof Platform]
-
-
-export const MessageDirection = {
-  INBOUND: 'INBOUND',
-  OUTBOUND: 'OUTBOUND'
-} as const
-
-export type MessageDirection = (typeof MessageDirection)[keyof typeof MessageDirection]
-
-
-export const CampaignStatus = {
-  DRAFT: 'DRAFT',
-  RUNNING: 'RUNNING',
-  COMPLETED: 'COMPLETED',
-  FAILED: 'FAILED'
-} as const
-
-export type CampaignStatus = (typeof CampaignStatus)[keyof typeof CampaignStatus]
