@@ -39,4 +39,23 @@ export const auth = betterAuth({
     },
   },
   trustedOrigins: ["http://localhost:3000", "https://app.wheatless.in"],
+
+  // After a user is signed up, create the new subscription record with Free plan
+
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          console.log("user", user);
+          await prisma.subscription.create({
+            data: {
+              userId: user.id,
+              plan: "Free",
+              status: "active",
+            },
+          });
+        },
+      },
+    },
+  },
 });

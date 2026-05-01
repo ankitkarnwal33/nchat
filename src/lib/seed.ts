@@ -1,4 +1,4 @@
-import prisma from "../src/lib/prisma";
+import prisma from "./prisma";
 
 import "dotenv/config";
 export const PLANS: {
@@ -35,7 +35,7 @@ export const PLANS: {
   {
     name: "Pro",
     accounts: 10,
-    automations: -1,
+    automations: Infinity,
     actionsPerMonth: 20000,
     followRequired: true,
   },

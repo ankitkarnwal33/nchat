@@ -61,7 +61,10 @@ export const ModelName = {
   Action: 'Action',
   AutomationLog: 'AutomationLog',
   PendingAutomation: 'PendingAutomation',
-  UserInteraction: 'UserInteraction'
+  UserInteraction: 'UserInteraction',
+  Subscription: 'Subscription',
+  Usage: 'Usage',
+  Plans: 'Plans'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -228,6 +231,47 @@ export const UserInteractionScalarFieldEnum = {
 } as const
 
 export type UserInteractionScalarFieldEnum = (typeof UserInteractionScalarFieldEnum)[keyof typeof UserInteractionScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  status: 'status',
+  accountsUsed: 'accountsUsed',
+  automationsUsed: 'automationsUsed',
+  actionsUsed: 'actionsUsed',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  createdAt: 'createdAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const UsageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  month: 'month',
+  actions: 'actions',
+  createdAt: 'createdAt'
+} as const
+
+export type UsageScalarFieldEnum = (typeof UsageScalarFieldEnum)[keyof typeof UsageScalarFieldEnum]
+
+
+export const PlansScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  accounts: 'accounts',
+  automations: 'automations',
+  actionsPerMonth: 'actionsPerMonth',
+  followRequired: 'followRequired',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlansScalarFieldEnum = (typeof PlansScalarFieldEnum)[keyof typeof PlansScalarFieldEnum]
 
 
 export const SortOrder = {

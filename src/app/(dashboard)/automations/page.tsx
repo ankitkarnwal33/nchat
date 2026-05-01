@@ -6,9 +6,10 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
+  CardDescription,
 } from "@/src/components/ui/card";
 
-import { Plus } from "lucide-react";
+import { ArrowRightIcon, Plus } from "lucide-react";
 import Link from "next/link";
 
 import { Separator } from "@/src/components/ui/separator";
@@ -21,6 +22,10 @@ import { Button } from "@/src/components/ui/button";
 export default async function Automations() {
   const automationsCount = await caller.getAutomationsCount();
   const instagramAccounts = await caller.getInstagramAccounts();
+  const { subscription, plan } = await caller.getSubscriptionAndPlan();
+
+  const canCreateAutomation =
+    (subscription?.automationsUsed || 0) < (plan?.automations || 0);
 
   return (
     <div className="flex flex-col gap-6 w-full mx-auto">
@@ -37,7 +42,7 @@ export default async function Automations() {
               </p>
             </div>
 
-            <AutomationModal />
+            {canCreateAutomation ? <AutomationModal /> : null}
           </div>
           <Separator />
           {/* // active and inactive automations */}
@@ -69,10 +74,33 @@ export default async function Automations() {
           </div>
           <Separator />
           <div className="flex flex-col">
+            {!canCreateAutomation ? (
+              <>
+                <Card className="border-destructive  border border-dashed">
+                  <CardHeader>
+                    <CardTitle>Limit Reached</CardTitle>
+                    <CardDescription className="text-destructive">
+                      You have reached the limit of automations. Upgrade to a
+                      paid plan to create more automations.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Link
+                      href="/upgrade"
+                      className="col-span-full w-fit  text-sm hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground px-4 py-2 rounded-md font-semibold flex items-center gap-2"
+                    >
+                      Upgrade Now <ArrowRightIcon className="w-4 h-4" />
+                    </Link>
+                  </CardContent>
+                </Card>
+                <Separator className="my-6" />
+              </>
+            ) : null}
+
             <p className=" text-md text-muted-foreground mb-6 max-w-2xl">
               Manage your automations
             </p>
-            <AllAutomations />
+            <AllAutomations canCreateAutomation={canCreateAutomation} />
           </div>
         </>
       ) : (

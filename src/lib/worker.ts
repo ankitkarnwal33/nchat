@@ -28,6 +28,64 @@ const worker = new Worker(
   "instagram_event_queue",
   async (job) => {
     const { data } = job;
+    const instagramAccountOwnerID = data?.id;
+    const instagramAccountOwner = await prisma.instagramAccount.findUnique({
+      where: {
+        instagramUserId: instagramAccountOwnerID,
+      },
+      select: {
+        id: true,
+        userId: true,
+      },
+    });
+    if (!instagramAccountOwner) {
+      return;
+    }
+
+    const subscription = await prisma.subscription.findUnique({
+      where: {
+        userId: instagramAccountOwner.userId,
+      },
+      select: {
+        id: true,
+        plan: true,
+        currentPeriodEnd: true,
+        status: true,
+        actionsUsed: true,
+      },
+    });
+    if (!subscription) {
+      return;
+    }
+    if (subscription.status !== "active") {
+      return;
+    }
+    if (
+      subscription?.currentPeriodEnd &&
+      new Date(subscription?.currentPeriodEnd) < new Date() &&
+      subscription.plan !== "Free"
+    ) {
+      return;
+    }
+
+    // Get the plan details
+    const currentPlan = await prisma.plans.findUnique({
+      where: {
+        name: subscription.plan,
+      },
+      select: {
+        actionsPerMonth: true,
+        followRequired: true,
+      },
+    });
+    if (!currentPlan) {
+      return;
+    }
+
+    // Check if the account is already used up the limit
+    if (subscription?.actionsUsed >= (currentPlan?.actionsPerMonth || 0)) {
+      return;
+    }
 
     // Check the type of the event and process it accordingly
     if (data?.messaging) {
@@ -41,10 +99,16 @@ const worker = new Worker(
       ) {
         console.log("Processing event for follow up message");
 
-        await instagramFollowUpMessageQueue.add(
-          "instagram_follow_up_message_queue",
-          data,
-        );
+        // Append subscription id to the data
+
+        data.subscriptionId = subscription.id;
+
+        if (currentPlan?.followRequired) {
+          await instagramFollowUpMessageQueue.add(
+            "instagram_follow_up_message_queue",
+            data,
+          );
+        }
 
         return;
       }
@@ -132,6 +196,7 @@ const worker = new Worker(
                 delaySeconds: action.delaySeconds,
                 automationId: automation.id,
                 comment_author_username,
+                subscriptionId: subscription.id,
                 comment_author_id,
                 createAndUpdateLog:
                   automation.actions.length === 1 ? true : false,
@@ -153,6 +218,7 @@ const worker = new Worker(
             // Add the DM to the queue
             await instagramSendDMQueue.add("instagram_send_dm_queue", {
               instagramUserId,
+              subscriptionId: subscription.id,
               commentId: comment_id,
               automationId: automation.id,
               action,
@@ -190,6 +256,7 @@ export const instagramSendCommentWorker = new Worker(
     try {
       const { data } = job;
       const {
+        subscriptionId,
         instagramUserId,
         commentId,
         message,
@@ -267,6 +334,25 @@ export const instagramSendCommentWorker = new Worker(
           },
         });
       }
+      // Increment the triggered count for the automation
+      await prisma.automation.update({
+        where: {
+          id: automationId,
+        },
+        data: {
+          triggeredCount: { increment: 1 },
+        },
+      });
+
+      // Increment the actions used for the subscription
+      await prisma.subscription.update({
+        where: {
+          id: subscriptionId || "",
+        },
+        data: {
+          actionsUsed: { increment: 1 },
+        },
+      });
     } catch (error) {
       console.log(error);
       await prisma.automationLog.update({
@@ -320,6 +406,7 @@ export const instagramSendDMWorker = new Worker(
     try {
       const { data } = job;
       const {
+        subscriptionId,
         instagramUserId,
         commentId,
         automationId,
@@ -407,6 +494,16 @@ export const instagramSendDMWorker = new Worker(
           true,
         );
 
+        // Increment the triggered count for the automation
+        await prisma.automation.update({
+          where: {
+            id: automationId,
+          },
+          data: {
+            triggeredCount: { increment: 1 },
+          },
+        });
+
         return;
       }
       // if in action meta is askForFollow is false then send the message along with the meta link if available
@@ -446,6 +543,26 @@ export const instagramSendDMWorker = new Worker(
         },
         data: {
           status: "success",
+        },
+      });
+
+      // Increment the triggered count for the automation
+      await prisma.automation.update({
+        where: {
+          id: automationId,
+        },
+        data: {
+          triggeredCount: { increment: 1 },
+        },
+      });
+
+      // Increment the actions used for the subscription
+      await prisma.subscription.update({
+        where: {
+          id: subscriptionId || "",
+        },
+        data: {
+          actionsUsed: { increment: 1 },
         },
       });
     } catch (error) {
@@ -590,6 +707,26 @@ export const instagramFollowUpMessageWorker = new Worker(
             `pending_automation:${senderId}:${pendingAutomationId}`,
           );
         }
+
+        // Increment the triggered count for the automation
+        await prisma.automation.update({
+          where: {
+            id: pendingAutomation[0]?.automationId || "",
+          },
+          data: {
+            triggeredCount: { increment: 1 },
+          },
+        });
+
+        // Increment the actions used for the subscription
+        await prisma.subscription.update({
+          where: {
+            id: data.subscriptionId || "",
+          },
+          data: {
+            actionsUsed: { increment: 1 },
+          },
+        });
 
         // Get the automation log and update the status to success
         automationLog = await prisma.automationLog.findUnique({

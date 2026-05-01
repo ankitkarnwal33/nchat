@@ -12,6 +12,7 @@ import {
 } from "@/src/lib/hashAccessToken";
 
 import { openai } from "@/src/lib/openai";
+import { PLANS } from "@/src/lib/Plans";
 
 export const instagramRouter = createTRPCRouter({
   // Get uploaded media of the instagram account
@@ -174,6 +175,34 @@ export const instagramRouter = createTRPCRouter({
         throw new Error("No active account found");
       }
 
+      // Check if the user has reached the limit of automations.
+      const subscription = await prisma.subscription.findUnique({
+        where: {
+          userId: ctx.auth.session.userId,
+        },
+        select: {
+          automationsUsed: true,
+          plan: true,
+        },
+      });
+
+      const plan = await prisma.plans.findUnique({
+        where: {
+          name: subscription?.plan,
+        },
+        select: {
+          automations: true,
+        },
+      });
+
+      // If the user has reached the limit of automations, return with the error message
+
+      if ((subscription?.automationsUsed || 0) >= (plan?.automations || 0)) {
+        throw new Error(
+          "You have reached the limit of automations. Please upgrade your plan to continue.",
+        );
+      }
+
       try {
         const keys = await redis.keys(
           `automations:${ctx.auth.session.userId}:${
@@ -185,7 +214,8 @@ export const instagramRouter = createTRPCRouter({
             await redis.del(key);
           }
         }
-        return await prisma.automation.create({
+        // create the automation in the database
+        await prisma.automation.create({
           data: {
             userId: ctx.auth.session.userId,
             accountId: activeAccountId,
@@ -203,6 +233,17 @@ export const instagramRouter = createTRPCRouter({
             },
           },
         });
+
+        // Update the subscription with the new automation
+        await prisma.subscription.update({
+          where: {
+            userId: ctx.auth.session.userId,
+          },
+          data: {
+            automationsUsed: { increment: 1 },
+          },
+        });
+        return { success: true, message: "Automation created successfully" };
       } catch (error) {
         console.error("Error is ", error);
         throw new Error((error as Error).message);
@@ -352,14 +393,25 @@ export const instagramRouter = createTRPCRouter({
             await redis.del(key);
           }
         }
+        // Delete the automation from the database
 
-        return await prisma.automation.delete({
+        await prisma.automation.delete({
           where: {
             id: automationId,
             userId: ctx.auth.session.userId,
             accountId: {
               in: [(await cookies()).get("activeAccountId")?.value || ""],
             },
+          },
+        });
+
+        // Update the subscription
+        await prisma.subscription.update({
+          where: {
+            userId: ctx.auth.session.userId,
+          },
+          data: {
+            automationsUsed: { decrement: 1 },
           },
         });
       } catch (error) {
@@ -488,7 +540,16 @@ export const instagramRouter = createTRPCRouter({
             await redis.del(key);
           }
         }
-        // invalidate the accounts queries
+        // Update the subscription
+        await prisma.subscription.update({
+          where: {
+            userId: ctx.auth.session.userId,
+          },
+          data: {
+            accountsUsed: { decrement: 1 },
+            automationsUsed: 0,
+          },
+        });
 
         // Redirect to the home page
         return { success: true, message: "Account disconnected successfully" };
@@ -648,6 +709,16 @@ export const appRouter = createTRPCRouter({
           },
           data: {
             image: igUser.profile_picture_url,
+          },
+        });
+
+        // Update the subscription
+        await prisma.subscription.update({
+          where: {
+            userId: ctx.auth.session.userId,
+          },
+          data: {
+            accountsUsed: { increment: 1 },
           },
         });
 
@@ -876,6 +947,48 @@ export const appRouter = createTRPCRouter({
         throw new Error((error as Error).message);
       }
     }),
+
+  createSubscription: protectedProcedure
+    .input(z.object({ plan: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { plan } = input;
+      try {
+        const planData = PLANS[plan];
+        if (!planData) {
+          throw new Error("Invalid plan");
+        }
+        return await prisma.subscription.create({
+          data: {
+            userId: ctx.auth.session.userId,
+            plan: planData.name,
+            status: "active",
+            currentPeriodStart: new Date(),
+            // Keep currentPeriodEnd infinite for Free plan
+            currentPeriodEnd:
+              planData.name === "Free"
+                ? null
+                : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          },
+        });
+      } catch (error) {
+        console.error("Error is ", error);
+        throw new Error((error as Error).message);
+      }
+    }),
+
+  getSubscriptionAndPlan: protectedProcedure.query(async ({ ctx }) => {
+    const subscription = await prisma.subscription.findUnique({
+      where: {
+        userId: ctx.auth.session.userId,
+      },
+    });
+    const plan = await prisma.plans.findUnique({
+      where: {
+        name: subscription?.plan,
+      },
+    });
+    return { subscription, plan };
+  }),
 
   instagram: instagramRouter,
 });

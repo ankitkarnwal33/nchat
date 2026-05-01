@@ -10,7 +10,11 @@ import {
 import { PlusIcon } from "lucide-react";
 import UploadedMedia from "./UploadedMedia";
 
-export function AutomationModal() {
+export function AutomationModal({
+  canCreateAutomation,
+}: {
+  canCreateAutomation?: boolean;
+}) {
   return (
     <Dialog>
       <DialogTrigger>
@@ -27,7 +31,7 @@ export function AutomationModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="-mx-4 no-scrollbar max-h-[70vh] overflow-y-auto px-4 py-6">
-          <UploadedMedia />
+          <UploadedMedia canCreateAutomation={canCreateAutomation} />
         </div>
       </DialogContent>
     </Dialog>

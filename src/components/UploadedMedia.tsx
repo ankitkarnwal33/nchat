@@ -23,7 +23,11 @@ function normalizeMediaPage(page: unknown): InstagramMedia[] {
   return [];
 }
 
-export default function UploadedMedia() {
+export default function UploadedMedia({
+  canCreateAutomation = true,
+}: {
+  canCreateAutomation?: boolean;
+}) {
   const trpcClient = useTRPCClient();
 
   const {
@@ -75,7 +79,11 @@ export default function UploadedMedia() {
               </Card>
             ))
           : mediaList.map((media: InstagramMedia) => (
-              <MediaCard key={media.id} media={media} />
+              <MediaCard
+                key={media.id}
+                media={media}
+                canCreateAutomation={canCreateAutomation}
+              />
             ))}
         {isFetching &&
           [1, 2, 3].map((item) => <Skeleton key={item} className=" h-80" />)}

@@ -9,9 +9,10 @@ import { Skeleton } from "./ui/skeleton";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { useEffect, useRef } from "react";
 import { Button } from "./ui/button";
-import { ArrowDown, ArrowUp, Loader2Icon } from "lucide-react";
+import { ArrowDown, ArrowRightIcon, ArrowUp, Loader2Icon } from "lucide-react";
 import Filter from "./Filter";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export interface AllAutomationList {
   name: string;
@@ -30,7 +31,11 @@ export interface AllAutomationList {
   };
 }
 
-export default function AllAutomationList() {
+export default function AllAutomationList({
+  canCreateAutomation,
+}: {
+  canCreateAutomation?: boolean;
+}) {
   const searchParams = useSearchParams();
   const trpc = useTRPC();
 
@@ -163,7 +168,16 @@ export default function AllAutomationList() {
               >
                 Go back to the top <ArrowUp className="w-4 h-4" />
               </Button>
-              <AutomationModal />
+              {canCreateAutomation ? (
+                <AutomationModal canCreateAutomation={canCreateAutomation} />
+              ) : (
+                <Link
+                  href="/upgrade"
+                  className="flex items-center gap-2 text-sm hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground px-4 py-2 rounded-md font-semibold"
+                >
+                  Upgrade Now <ArrowRightIcon className="w-4 h-4" />
+                </Link>
+              )}
             </div>
           </div>
         )}
@@ -180,7 +194,7 @@ export default function AllAutomationList() {
               Create your first automation to start replying to comments and DMs
               automatically.
             </p>
-            <AutomationModal />
+            <AutomationModal canCreateAutomation={canCreateAutomation} />
           </div>
         )}
     </div>

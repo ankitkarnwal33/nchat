@@ -6,7 +6,13 @@ import { Badge } from "./ui/badge";
 import Link from "next/link";
 import { useSidebar } from "./ui/sidebar";
 
-export default function MediaCard({ media }: { media: InstagramMedia }) {
+export default function MediaCard({
+  media,
+  canCreateAutomation,
+}: {
+  media: InstagramMedia;
+  canCreateAutomation?: boolean;
+}) {
   const { setOpen } = useSidebar();
   const imageUrl =
     media.media_type === "VIDEO" ? media.thumbnail_url : media.media_url;
@@ -70,18 +76,20 @@ export default function MediaCard({ media }: { media: InstagramMedia }) {
           </div>
           <div></div>
         </div>
-        <div className="flex items-center gap-2 ">
-          <Link
-            href={`/automations/new_automation?mediaId=${mediaId}&username=${username}&imageUrl=${encodedImageUrl}&caption=${caption}`}
-            onClick={() => {
-              setOpen(false);
-            }}
-            className="transition-colors w-full py-2 text-sm bg-primary/80 rounded-md shadow-sm hover:shadow-md font-medium text-center flex items-center justify-center "
-          >
-            <PlusIcon className="w-4 h-4" />
-            Create Automation
-          </Link>
-        </div>
+        {canCreateAutomation ? (
+          <div className="flex items-center gap-2 ">
+            <Link
+              href={`/automations/new_automation?mediaId=${mediaId}&username=${username}&imageUrl=${encodedImageUrl}&caption=${caption}`}
+              onClick={() => {
+                setOpen(false);
+              }}
+              className="transition-colors w-full py-2 text-sm bg-primary/80 rounded-md shadow-sm hover:shadow-md font-medium text-center flex items-center justify-center "
+            >
+              <PlusIcon className="w-4 h-4" />
+              Create Automation
+            </Link>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );

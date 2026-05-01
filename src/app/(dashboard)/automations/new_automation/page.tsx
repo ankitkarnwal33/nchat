@@ -92,11 +92,11 @@ export default function NewAutomation() {
   // Add Link To The Private Message
   const [addLink, setAddLink] = useState(false);
   const trpc = useTRPC();
-  const router = useRouter();
-  const queryClient = useQueryClient();
   const { mutate } = useMutation(
     trpc.instagram.createAutomation.mutationOptions(),
   );
+  const router = useRouter();
+  const queryClient = useQueryClient();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = (event: any) => {
     event.preventDefault();
@@ -162,8 +162,8 @@ export default function NewAutomation() {
         );
         router.refresh();
       },
-      onError: () => {
-        toast.error("Failed to create automation");
+      onError: (error) => {
+        toast.error(error.message);
       },
     });
   };

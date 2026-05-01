@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Subscription" ADD COLUMN     "accountsUsed" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "actionsUsed" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "automationsUsed" INTEGER NOT NULL DEFAULT 0,
+ALTER COLUMN "plan" SET DEFAULT 'FREE',
+ALTER COLUMN "status" SET DEFAULT 'active',
+ALTER COLUMN "currentPeriodStart" DROP NOT NULL,
+ALTER COLUMN "currentPeriodEnd" DROP NOT NULL;

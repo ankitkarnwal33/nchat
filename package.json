@@ -10,7 +10,8 @@
     "worker": "tsx src/lib/worker.ts",
     "resend": "tsx src/lib/resend.ts",
     "hashtoken": "tsx src/lib/hashAccessToken.ts",
-    "email-worker": "tsx src/lib/emailWorker.ts"
+    "email-worker": "tsx src/lib/emailWorker.ts",
+    "seed": "tsx src/lib/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.1031.0",

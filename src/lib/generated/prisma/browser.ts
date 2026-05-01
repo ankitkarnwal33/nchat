@@ -72,3 +72,18 @@ export type PendingAutomation = Prisma.PendingAutomationModel
  * 
  */
 export type UserInteraction = Prisma.UserInteractionModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model Usage
+ * 
+ */
+export type Usage = Prisma.UsageModel
+/**
+ * Model Plans
+ * 
+ */
+export type Plans = Prisma.PlansModel

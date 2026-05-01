@@ -34,6 +34,7 @@ import { Input } from "@/src/components/ui/input";
 import { EyeClosedIcon, EyeIcon, MailIcon, UserIcon } from "lucide-react";
 import { LockIcon } from "lucide-react";
 import { useState } from "react";
+
 import {
   authClient,
   signInWithGitHub,
@@ -88,7 +89,7 @@ export default function RegisterForm() {
           name: data.name,
         },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
             toast.success("Account created successfully");
             router.push("/home");
           },

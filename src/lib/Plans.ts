@@ -1,14 +1,14 @@
-import prisma from "../src/lib/prisma";
-
-import "dotenv/config";
-export const PLANS: {
-  name: string;
-  accounts: number;
-  automations: number;
-  actionsPerMonth: number;
-  followRequired: boolean;
-}[] = [
+export const PLANS: Record<
+  string,
   {
+    name: string;
+    accounts: number;
+    automations: number;
+    actionsPerMonth: number;
+    followRequired: boolean;
+  }
+> = {
+  FREE: {
     name: "Free",
     accounts: 1,
     automations: 1,
@@ -16,7 +16,7 @@ export const PLANS: {
     followRequired: false,
   },
 
-  {
+  STARTER: {
     name: "Starter",
     accounts: 1,
     automations: 5,
@@ -24,7 +24,7 @@ export const PLANS: {
     followRequired: false,
   },
 
-  {
+  GROWTH: {
     name: "Growth",
     accounts: 3,
     automations: 50,
@@ -32,21 +32,11 @@ export const PLANS: {
     followRequired: true,
   },
 
-  {
+  PRO: {
     name: "Pro",
     accounts: 10,
-    automations: -1,
+    automations: Infinity,
     actionsPerMonth: 20000,
     followRequired: true,
   },
-];
-
-export const seedPlans = async () => {
-  for (const plan of PLANS) {
-    await prisma.plans.create({
-      data: plan,
-    });
-  }
 };
-
-seedPlans();
