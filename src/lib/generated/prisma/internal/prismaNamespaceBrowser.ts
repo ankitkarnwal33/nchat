@@ -64,7 +64,10 @@ export const ModelName = {
   UserInteraction: 'UserInteraction',
   Subscription: 'Subscription',
   Usage: 'Usage',
-  Plans: 'Plans'
+  Plans: 'Plans',
+  SubscriptionPlan: 'SubscriptionPlan',
+  Payment: 'Payment',
+  Contact: 'Contact'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -241,6 +244,7 @@ export const SubscriptionScalarFieldEnum = {
   accountsUsed: 'accountsUsed',
   automationsUsed: 'automationsUsed',
   actionsUsed: 'actionsUsed',
+  allocatedActions: 'allocatedActions',
   currentPeriodStart: 'currentPeriodStart',
   currentPeriodEnd: 'currentPeriodEnd',
   createdAt: 'createdAt'
@@ -272,6 +276,57 @@ export const PlansScalarFieldEnum = {
 } as const
 
 export type PlansScalarFieldEnum = (typeof PlansScalarFieldEnum)[keyof typeof PlansScalarFieldEnum]
+
+
+export const SubscriptionPlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price',
+  tagline: 'tagline',
+  description: 'description',
+  features: 'features',
+  limitNote: 'limitNote',
+  cta: 'cta',
+  ctaHref: 'ctaHref',
+  highlight: 'highlight',
+  popular: 'popular',
+  variant: 'variant',
+  socialProof: 'socialProof',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionPlanScalarFieldEnum = (typeof SubscriptionPlanScalarFieldEnum)[keyof typeof SubscriptionPlanScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  amount: 'amount',
+  orderId: 'orderId',
+  paymentId: 'paymentId',
+  status: 'status',
+  offer: 'offer',
+  currency: 'currency',
+  method: 'method',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const ContactScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  message: 'message',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
 
 
 export const SortOrder = {

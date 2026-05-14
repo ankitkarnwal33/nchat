@@ -1,5 +1,6 @@
 import { z } from "zod/v3";
-import { createTRPCRouter, protectedProcedure } from "../init";
+import axios from "axios";
+import { baseProcedure, createTRPCRouter, protectedProcedure } from "../init";
 import prisma from "@/src/lib/prisma";
 import { cookies } from "next/headers";
 import { getCache, setCache } from "@/src/lib/cache";
@@ -12,7 +13,49 @@ import {
 } from "@/src/lib/hashAccessToken";
 
 import { openai } from "@/src/lib/openai";
-import { PLANS } from "@/src/lib/Plans";
+import {
+  Plans,
+  Subscription,
+  SubscriptionPlan,
+} from "@/src/lib/generated/prisma/client";
+
+export const getPlanDetails = async (
+  plan: string,
+): Promise<SubscriptionPlan | null> => {
+  const redisKey = `subscription-plan-${plan}`;
+
+  const cachedData = await getCache(redisKey);
+  if (cachedData) {
+    return cachedData as SubscriptionPlan;
+  }
+  const subscriptionPlan = await prisma.subscriptionPlan.findUnique({
+    where: { name: plan },
+  });
+  if (!subscriptionPlan) {
+    return null;
+  }
+  await setCache(redisKey, subscriptionPlan, 60 * 60 * 24); // 24 hours
+  return subscriptionPlan as SubscriptionPlan;
+};
+
+export const getPlanDetailsMain = async (
+  plan: string,
+): Promise<Plans | null> => {
+  const redisKey = `plans-${plan}`;
+
+  const cachedData = await getCache(redisKey);
+  if (cachedData) {
+    return cachedData as Plans;
+  }
+  const plans = await prisma.plans.findUnique({
+    where: { name: plan },
+  });
+  if (!plans) {
+    return null;
+  }
+  await setCache(redisKey, plans, 60 * 60 * 24); // 24 hours
+  return plans as Plans;
+};
 
 export const instagramRouter = createTRPCRouter({
   // Get uploaded media of the instagram account
@@ -563,6 +606,163 @@ export const instagramRouter = createTRPCRouter({
     }),
 });
 
+export const subscriptionRouter = createTRPCRouter({
+  getSubscriptionPlans: protectedProcedure.query(async ({}) => {
+    // Get the subscription plans from the cache
+    const redisKey = `subscription-plans`;
+    const cachedData = await getCache(redisKey);
+    if (cachedData) {
+      console.log("Cached data found");
+      return cachedData;
+    }
+    console.log("No cached data found");
+    const subscriptionPlans = await prisma.subscriptionPlan.findMany({
+      orderBy: {
+        price: "asc",
+      },
+    });
+    await setCache(redisKey, subscriptionPlans, 60 * 60 * 24); // 24 hours
+    return subscriptionPlans;
+  }),
+  getSubscriptionPlan: protectedProcedure
+    .input(z.object({ plan: z.string() }))
+    .query(async ({ input }) => {
+      try {
+        const planData = await getPlanDetails(input.plan);
+        if (!planData) {
+          throw new Error("Plan not found");
+        }
+        return planData;
+      } catch (error) {
+        console.error("Error is ", error);
+        throw new Error(
+          (error as Error).message || "Failed to get subscription plan.",
+        );
+      }
+    }),
+  createOrder: protectedProcedure
+    .input(z.object({ plan: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { plan } = input;
+      try {
+        const planData = await getPlanDetails(plan);
+        if (!planData) {
+          throw new Error("Plan not found");
+        }
+        const planAmount = (planData as SubscriptionPlan)?.price;
+        const orderId =
+          `order_${ctx.auth.session.userId}_${Date.now()}` as string;
+        if (!planAmount) {
+          throw new Error("Plan amount not found");
+        }
+
+        const isProduction = process.env.NODE_ENV === "production";
+        const cashfreeBaseUrl = isProduction
+          ? "https://api.cashfree.com/pg/orders"
+          : "https://sandbox.cashfree.com/pg/orders";
+        const cashfreeClientId = isProduction
+          ? process.env.CASHFREE_APP_ID_PROD!
+          : process.env.CASHFREE_APP_ID_TEST!;
+        const cashfreeClientSecret = isProduction
+          ? process.env.CASHFREE_SECRET_KEY_PROD!
+          : process.env.CASHFREE_SECRET_KEY_TEST!;
+
+        const response = await axios.post(
+          cashfreeBaseUrl,
+          {
+            order_id: orderId,
+            order_amount: planAmount,
+            order_currency: "INR",
+
+            customer_details: {
+              customer_id: ctx.auth.session.userId,
+              customer_email: ctx.auth.user.email || "",
+              customer_phone: "9999999999",
+            },
+
+            order_meta: {
+              return_url: `https://chatninjas.in/payment-success?order_id=${orderId}`,
+            },
+          },
+          {
+            headers: {
+              "x-api-version": "2023-08-01",
+              "x-client-id": cashfreeClientId,
+              "x-client-secret": cashfreeClientSecret,
+            },
+          },
+        );
+
+        // ✅ Save order in DB
+        await prisma.payment.create({
+          data: {
+            userId: ctx.auth.session.userId,
+            plan,
+            amount: planAmount,
+            orderId,
+            status: "CREATED",
+          },
+        });
+
+        console.log("response.data", response.data);
+
+        return response.data;
+      } catch (error) {
+        console.error("Error is ", error);
+        throw new Error((error as Error).message || "Failed to create order.");
+      }
+    }),
+  getUserSubscription: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      // Get the current user's subscription from the cache if available
+
+      const susbcriptionKey = `subscription:${ctx.auth.session.userId}`;
+      const cachedData = await getCache(susbcriptionKey);
+      if (cachedData) {
+        return cachedData as Subscription;
+      }
+
+      // Subscription not found in cache, so we need to get it from the database
+
+      const subscription = await prisma.subscription.findUnique({
+        where: { userId: ctx.auth.session.userId },
+      });
+      if (!subscription) {
+        throw new Error("Subscription not found");
+      }
+      // Set the subscription in the cache
+      await setCache(susbcriptionKey, subscription, 60 * 60 * 24); // 24 hours
+      return subscription;
+    } catch (error) {
+      console.error("Error is ", error);
+      throw new Error(
+        (error as Error).message || "Failed to get user subscription.",
+      );
+    }
+  }),
+  getPaymentStatus: protectedProcedure
+    .input(z.object({ orderId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      try {
+        const { orderId } = input;
+        const payment = await prisma.payment.findUnique({
+          where: { orderId, userId: ctx.auth.session.userId },
+        });
+        if (payment?.status.toLowerCase() === "paid") {
+          // Flush the subscription cache for the current user
+          const susbcriptionKey = `subscription:${ctx.auth.session.userId}`;
+          await redis.del(susbcriptionKey);
+        }
+        return payment;
+      } catch (error) {
+        console.log(error);
+        throw new Error(
+          (error as Error).message || "Failed to get payment status.",
+        );
+      }
+    }),
+});
+
 export const appRouter = createTRPCRouter({
   getUser: protectedProcedure.query(async ({ ctx }) => {
     const user = await prisma.user.findUnique({
@@ -581,8 +781,53 @@ export const appRouter = createTRPCRouter({
         },
       },
     });
+
     return user;
   }),
+  contactUs: baseProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        email: z.string(),
+        message: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { name, email, message } = input;
+      try {
+        await prisma.contact.create({
+          data: { name, email, message },
+        });
+        // Send the message to the slack
+        const slackResponse = await fetch(
+          process.env.SLACK_WEBHOOK_URL_CONTACT_US!,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              text: `New contact us request from ${name} <${email}>:\n${message}`,
+            }),
+          },
+        );
+        if (!slackResponse.ok) {
+          throw new Error("Failed to send message to slack");
+        }
+        return {
+          success: true,
+          message: "Contact us request sent successfully",
+        };
+      } catch (error) {
+        // Send the error to the slack
+        await fetch(process.env.SLACK_WEBHOOK_URL_INSTAGRAM!, {
+          method: "POST",
+          body: JSON.stringify({
+            text: `Error in contact us request: ${error}`,
+          }),
+        });
+
+        console.error("Error is ", error);
+        throw new Error((error as Error).message || "Failed to contact us.");
+      }
+    }),
   exchangeInstagramToken: protectedProcedure
     .input(
       z.object({
@@ -953,7 +1198,10 @@ export const appRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { plan } = input;
       try {
-        const planData = PLANS[plan];
+        const planData = await getPlanDetailsMain(plan);
+        if (!planData) {
+          throw new Error("Invalid plan");
+        }
         if (!planData) {
           throw new Error("Invalid plan");
         }
@@ -965,7 +1213,7 @@ export const appRouter = createTRPCRouter({
             currentPeriodStart: new Date(),
             // Keep currentPeriodEnd infinite for Free plan
             currentPeriodEnd:
-              planData.name === "Free"
+              planData.name === "free"
                 ? null
                 : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           },
@@ -977,21 +1225,27 @@ export const appRouter = createTRPCRouter({
     }),
 
   getSubscriptionAndPlan: protectedProcedure.query(async ({ ctx }) => {
-    const subscription = await prisma.subscription.findUnique({
-      where: {
-        userId: ctx.auth.session.userId,
-      },
-    });
-    const plan = await prisma.plans.findUnique({
-      where: {
-        name: subscription?.plan,
-      },
-    });
-    return { subscription, plan };
+    try {
+      const subscription = await prisma.subscription.findUnique({
+        where: {
+          userId: ctx.auth.session.userId,
+        },
+      });
+      const plan = await getPlanDetailsMain(subscription?.plan || "");
+      if (!plan) {
+        throw new Error("Invalid plan");
+      }
+      return { subscription, plan };
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
   }),
 
   instagram: instagramRouter,
+  subscription: subscriptionRouter,
 });
+
 // export type definition of API
 export type AppRouter = typeof appRouter;
 export type InstagramRouter = typeof instagramRouter;
+export type SubscriptionRouter = typeof subscriptionRouter;

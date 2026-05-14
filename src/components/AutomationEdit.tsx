@@ -428,6 +428,7 @@ Example: If you add “price”, automation will run when someone comments “pr
                                 <FollowSwitch
                                   askForFollow={askForFollow}
                                   setAskForFollow={setAskForFollow}
+                                  can_use_follow_feature={true}
                                 />
                                 {askForFollow && (
                                   <FollowMessage
@@ -480,6 +481,7 @@ Example: If you add “price”, automation will run when someone comments “pr
                                 <FollowSwitch
                                   askForFollow={askForFollow}
                                   setAskForFollow={setAskForFollow}
+                                  can_use_follow_feature={true}
                                 />
                                 {askForFollow && (
                                   <FollowMessage

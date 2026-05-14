@@ -9,7 +9,7 @@ import { Progress } from "@/src/components/ui/progress";
 import { Separator } from "@/src/components/ui/separator";
 import UploadedMedia from "@/src/components/UploadedMedia";
 import { caller } from "@/src/trpc/server";
-import { Plus } from "lucide-react";
+import { ArrowRightIcon, Plus } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { MdPermMedia } from "react-icons/md";
@@ -22,13 +22,13 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
   const { subscription, plan } = await caller.getSubscriptionAndPlan();
-  console.log("subscription", subscription);
-  console.log("plan", plan);
+
   const instagramAccounts = await caller.getInstagramAccounts();
-  const onFreePlan: boolean = subscription?.plan === "Free";
+  const onFreePlan: boolean = subscription?.plan === "free";
+
   return (
     <>
-      <FreePlanPopup onFreePlan={onFreePlan} />
+      {onFreePlan && <FreePlanPopup onFreePlan={onFreePlan} />}
       <div className="flex flex-col gap-6 w-full mx-auto relative ">
         {/* // active and inactive automations */}
 
@@ -57,7 +57,7 @@ export default async function Dashboard() {
             <CardContent>
               <p>
                 {subscription?.automationsUsed} /{" "}
-                {plan?.automations === -1 ? "Infinity" : plan?.automations}
+                {plan?.automations === -1 ? "Unlimited" : plan?.automations}
               </p>
               <Progress
                 value={
@@ -74,16 +74,24 @@ export default async function Dashboard() {
 
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Actions Used</CardTitle>
+              <CardTitle className="flex items-center justify-between">
+                <span>Actions Used</span>
+                <Link
+                  href="/upgrade"
+                  className="text-sm text-primary hover:text-primary-dark transition-all duration-300 flex items-center gap-2"
+                >
+                  Need More Actions? <ArrowRightIcon className="w-4 h-4" />
+                </Link>
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <p>
-                {subscription?.actionsUsed} / {plan?.actionsPerMonth}
+                {subscription?.actionsUsed} / {subscription?.allocatedActions}
               </p>
               <Progress
                 value={
                   ((subscription?.actionsUsed || 0) /
-                    (plan?.actionsPerMonth || 0)) *
+                    (subscription?.allocatedActions || 0)) *
                   100
                 }
                 className="w-full mt-2 h-2"
@@ -95,14 +103,14 @@ export default async function Dashboard() {
 
         {instagramAccounts.length > 0 ? (
           <div className="flex flex-col">
-            <h1 className="text-xl font-semibold flex items-center gap-2">
-              <MdPermMedia className="w-5 h-5 mr-2" /> Start Automating on your
+            <h1 className="text-xl font-semibold flex items-center gap-2 mb-6">
+              <MdPermMedia className="w-5 h-5 mr-2 " /> Start Automating on your
               Instagram media now
             </h1>
-            <p className=" ml-9 text-sm text-muted-foreground mb-6 max-w-2xl">
-              Here are your uploaded media on Instagram. You can run automations
-              on them to create content for your instagram account.
-            </p>
+            {/* <p className=" ml-9 text-sm text-muted-foreground mb-6 max-w-2xl">
+              Create automations to automate your Instagram account. You can run
+              them on your uploaded media.
+            </p> */}
             <UploadedMedia
               canCreateAutomation={
                 (subscription?.automationsUsed || 0) < (plan?.automations || 0)

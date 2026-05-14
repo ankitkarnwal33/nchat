@@ -52,6 +52,7 @@ const worker = new Worker(
         currentPeriodEnd: true,
         status: true,
         actionsUsed: true,
+        allocatedActions: true,
       },
     });
     if (!subscription) {
@@ -60,6 +61,12 @@ const worker = new Worker(
     if (subscription.status !== "active") {
       return;
     }
+    // Check if the account is already used up the limit
+    if (subscription?.actionsUsed >= (subscription?.allocatedActions || 0)) {
+      return;
+    }
+
+    // Check if the subscription is expired
     if (
       subscription?.currentPeriodEnd &&
       new Date(subscription?.currentPeriodEnd) < new Date() &&
@@ -74,16 +81,10 @@ const worker = new Worker(
         name: subscription.plan,
       },
       select: {
-        actionsPerMonth: true,
         followRequired: true,
       },
     });
     if (!currentPlan) {
-      return;
-    }
-
-    // Check if the account is already used up the limit
-    if (subscription?.actionsUsed >= (currentPlan?.actionsPerMonth || 0)) {
       return;
     }
 

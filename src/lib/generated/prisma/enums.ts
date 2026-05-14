@@ -40,3 +40,12 @@ export const PendingStatus = {
 } as const
 
 export type PendingStatus = (typeof PendingStatus)[keyof typeof PendingStatus]
+
+
+export const PaymentStatus = {
+  CREATED: 'CREATED',
+  PAID: 'PAID',
+  FAILED: 'FAILED'
+} as const
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]

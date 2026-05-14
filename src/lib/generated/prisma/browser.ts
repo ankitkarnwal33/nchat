@@ -87,3 +87,18 @@ export type Usage = Prisma.UsageModel
  * 
  */
 export type Plans = Prisma.PlansModel
+/**
+ * Model SubscriptionPlan
+ * 
+ */
+export type SubscriptionPlan = Prisma.SubscriptionPlanModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model Contact
+ * 
+ */
+export type Contact = Prisma.ContactModel

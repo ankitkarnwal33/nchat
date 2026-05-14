@@ -56,6 +56,7 @@ Example: “Hi there! Thanks for commenting 😊. Here’s the offer 🎉: ”"
           placeholder={`${!isPending ? "Hi there! Thanks for commenting 😊. Here’s the offer 🎉  ..." : ""}`}
           value={isPending ? "" : message}
           onChange={(e) => setMessage(e.target.value)}
+          required={true}
         />
         {isPending && (
           <div className="absolute top-4 left-2 w-full flex gap-2 flex-col">

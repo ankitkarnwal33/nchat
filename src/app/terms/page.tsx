@@ -311,11 +311,9 @@ export default function TermsAndConditionsPage() {
               </h1>
               <p className="text-muted-foreground text-sm font-mono max-w-lg leading-relaxed">
                 Welcome to{" "}
-                <span className="text-primary font-medium">
-                  [Your App Name]
-                </span>
-                . By using our platform, you agree to the following terms.
-                Please read them carefully before continuing.
+                <span className="text-primary font-medium">ChatNinjas</span>. By
+                using our platform, you agree to the following terms. Please
+                read them carefully before continuing.
               </p>
             </div>
 
@@ -325,9 +323,7 @@ export default function TermsAndConditionsPage() {
                 <SectionHeading number="01" title="Description of Service" />
                 <div className="pl-9">
                   <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                    <span className="text-primary font-medium">
-                      [Your App Name]
-                    </span>{" "}
+                    <span className="text-primary font-medium">ChatNinjas</span>{" "}
                     provides Instagram automation tools that allow users to:
                   </p>
                   <div className="grid sm:grid-cols-3 gap-3">
@@ -585,8 +581,16 @@ export default function TermsAndConditionsPage() {
                   </p>
                   <div className="space-y-3 max-w-sm">
                     {[
-                      { icon: "✉️", label: "Email", value: "[your email]" },
-                      { icon: "🌐", label: "Website", value: "[your domain]" },
+                      {
+                        icon: "✉️",
+                        label: "Email",
+                        value: "KARNWALANKIT89@GMAIL.COM",
+                      },
+                      {
+                        icon: "🌐",
+                        label: "Website",
+                        value: "https://chatninjas.in",
+                      },
                     ].map((c, i) => (
                       <div
                         key={i}
@@ -612,7 +616,7 @@ export default function TermsAndConditionsPage() {
             <div className="mt-20 pt-10 border-t border-border">
               <p className="text-muted-foreground/40 text-xs font-mono leading-relaxed">
                 By using our platform, you agree to these Terms and Conditions.
-                <br />© [Your App Name] · All rights reserved.
+                <br />© ChatNinjas · All rights reserved.
               </p>
             </div>
           </main>

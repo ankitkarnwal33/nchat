@@ -22,6 +22,7 @@ export default function LinkDM({
         placeholder="https://example.com"
         value={link}
         onChange={(e) => setLink(e.target.value)}
+        required={true}
       />
       <CardDescription className="font-semibold text-muted-foreground mt-3">
         <TooltipHelp title="The text that will be displayed as the link. Example: “Click here to get the offer”">
@@ -34,6 +35,7 @@ export default function LinkDM({
         placeholder="Ex: Click here to get the offer"
         value={linkText}
         onChange={(e) => setLinkText(e.target.value)}
+        required={true}
       />
       <Separator className="my-4" />
     </div>

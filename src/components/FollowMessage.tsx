@@ -21,6 +21,7 @@ export default function FollowMessage({
         placeholder="Follow us on Instagram to get the offer 🎉"
         value={followMessage}
         onChange={(e) => setFollowMessage(e.target.value)}
+        required={true}
       />
     </div>
   );

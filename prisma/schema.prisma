@@ -1,7 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
   provider = "prisma-client"
@@ -25,6 +21,7 @@ model User {
   instagramAccounts InstagramAccount[]
   automations Automation[]
   subscription Subscription?
+  payments Payment[]
   @@unique([email])
   @@map("user")
 }
@@ -229,6 +226,8 @@ model Subscription {
   accountsUsed Int @default(0)
   automationsUsed Int @default(0)
   actionsUsed Int @default(0)
+
+  allocatedActions Int @default(50)
  
  // Not adding default values here because we want to manually set them when the subscription is created
   currentPeriodStart DateTime?
@@ -264,4 +263,68 @@ model Plans {
   updatedAt DateTime @updatedAt
 
   @@unique([name])
+}
+
+model SubscriptionPlan {
+  id String @id @default(cuid())
+  name String
+  price Int
+  tagline String
+  description String
+  features String[]
+  limitNote String?
+  cta String
+  ctaHref String
+  highlight String?
+  popular Boolean @default(false)
+  variant String @default("outline") 
+  socialProof String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name])
+}
+
+
+model Payment {
+  id        String   @id @default(cuid())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  plan      String   // STARTER, GROWTH, PRO
+  amount    Int      // in INR (rupees, not paise)
+
+  orderId   String   @unique
+  paymentId String?
+  // Status tracking
+  status    PaymentStatus
+
+  // Discount metadata
+
+  offer Json?
+
+  // Metadata
+  currency  String   @default("INR")
+  method    String?  // UPI, CARD, NETBANKING
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentStatus {
+  CREATED
+  PAID
+  FAILED
+}
+
+// Contact us from
+model Contact {
+  id String @id @default(cuid())
+  name String
+  email String
+  message String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

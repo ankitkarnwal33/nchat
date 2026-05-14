@@ -46,7 +46,7 @@ export default async function Automations() {
           </div>
           <Separator />
           {/* // active and inactive automations */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2  gap-4 w-full">
             <Card className="w-full">
               <CardHeader>
                 <CardTitle>Active Automations</CardTitle>
@@ -61,14 +61,6 @@ export default async function Automations() {
               </CardHeader>
               <CardContent>
                 <p>{automationsCount?.inactive}</p>
-              </CardContent>
-            </Card>
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Total runs</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>Pending</p>
               </CardContent>
             </Card>
           </div>

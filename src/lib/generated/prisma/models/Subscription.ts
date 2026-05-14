@@ -30,12 +30,14 @@ export type SubscriptionAvgAggregateOutputType = {
   accountsUsed: number | null
   automationsUsed: number | null
   actionsUsed: number | null
+  allocatedActions: number | null
 }
 
 export type SubscriptionSumAggregateOutputType = {
   accountsUsed: number | null
   automationsUsed: number | null
   actionsUsed: number | null
+  allocatedActions: number | null
 }
 
 export type SubscriptionMinAggregateOutputType = {
@@ -46,6 +48,7 @@ export type SubscriptionMinAggregateOutputType = {
   accountsUsed: number | null
   automationsUsed: number | null
   actionsUsed: number | null
+  allocatedActions: number | null
   currentPeriodStart: Date | null
   currentPeriodEnd: Date | null
   createdAt: Date | null
@@ -59,6 +62,7 @@ export type SubscriptionMaxAggregateOutputType = {
   accountsUsed: number | null
   automationsUsed: number | null
   actionsUsed: number | null
+  allocatedActions: number | null
   currentPeriodStart: Date | null
   currentPeriodEnd: Date | null
   createdAt: Date | null
@@ -72,6 +76,7 @@ export type SubscriptionCountAggregateOutputType = {
   accountsUsed: number
   automationsUsed: number
   actionsUsed: number
+  allocatedActions: number
   currentPeriodStart: number
   currentPeriodEnd: number
   createdAt: number
@@ -83,12 +88,14 @@ export type SubscriptionAvgAggregateInputType = {
   accountsUsed?: true
   automationsUsed?: true
   actionsUsed?: true
+  allocatedActions?: true
 }
 
 export type SubscriptionSumAggregateInputType = {
   accountsUsed?: true
   automationsUsed?: true
   actionsUsed?: true
+  allocatedActions?: true
 }
 
 export type SubscriptionMinAggregateInputType = {
@@ -99,6 +106,7 @@ export type SubscriptionMinAggregateInputType = {
   accountsUsed?: true
   automationsUsed?: true
   actionsUsed?: true
+  allocatedActions?: true
   currentPeriodStart?: true
   currentPeriodEnd?: true
   createdAt?: true
@@ -112,6 +120,7 @@ export type SubscriptionMaxAggregateInputType = {
   accountsUsed?: true
   automationsUsed?: true
   actionsUsed?: true
+  allocatedActions?: true
   currentPeriodStart?: true
   currentPeriodEnd?: true
   createdAt?: true
@@ -125,6 +134,7 @@ export type SubscriptionCountAggregateInputType = {
   accountsUsed?: true
   automationsUsed?: true
   actionsUsed?: true
+  allocatedActions?: true
   currentPeriodStart?: true
   currentPeriodEnd?: true
   createdAt?: true
@@ -225,6 +235,7 @@ export type SubscriptionGroupByOutputType = {
   accountsUsed: number
   automationsUsed: number
   actionsUsed: number
+  allocatedActions: number
   currentPeriodStart: Date | null
   currentPeriodEnd: Date | null
   createdAt: Date
@@ -261,6 +272,7 @@ export type SubscriptionWhereInput = {
   accountsUsed?: Prisma.IntFilter<"Subscription"> | number
   automationsUsed?: Prisma.IntFilter<"Subscription"> | number
   actionsUsed?: Prisma.IntFilter<"Subscription"> | number
+  allocatedActions?: Prisma.IntFilter<"Subscription"> | number
   currentPeriodStart?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   currentPeriodEnd?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
@@ -275,6 +287,7 @@ export type SubscriptionOrderByWithRelationInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
   currentPeriodStart?: Prisma.SortOrderInput | Prisma.SortOrder
   currentPeriodEnd?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -292,6 +305,7 @@ export type SubscriptionWhereUniqueInput = Prisma.AtLeast<{
   accountsUsed?: Prisma.IntFilter<"Subscription"> | number
   automationsUsed?: Prisma.IntFilter<"Subscription"> | number
   actionsUsed?: Prisma.IntFilter<"Subscription"> | number
+  allocatedActions?: Prisma.IntFilter<"Subscription"> | number
   currentPeriodStart?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   currentPeriodEnd?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
@@ -306,6 +320,7 @@ export type SubscriptionOrderByWithAggregationInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
   currentPeriodStart?: Prisma.SortOrderInput | Prisma.SortOrder
   currentPeriodEnd?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -327,6 +342,7 @@ export type SubscriptionScalarWhereWithAggregatesInput = {
   accountsUsed?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
   automationsUsed?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
   actionsUsed?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
+  allocatedActions?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
   currentPeriodStart?: Prisma.DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
   currentPeriodEnd?: Prisma.DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subscription"> | Date | string
@@ -339,6 +355,7 @@ export type SubscriptionCreateInput = {
   accountsUsed?: number
   automationsUsed?: number
   actionsUsed?: number
+  allocatedActions?: number
   currentPeriodStart?: Date | string | null
   currentPeriodEnd?: Date | string | null
   createdAt?: Date | string
@@ -353,6 +370,7 @@ export type SubscriptionUncheckedCreateInput = {
   accountsUsed?: number
   automationsUsed?: number
   actionsUsed?: number
+  allocatedActions?: number
   currentPeriodStart?: Date | string | null
   currentPeriodEnd?: Date | string | null
   createdAt?: Date | string
@@ -365,6 +383,7 @@ export type SubscriptionUpdateInput = {
   accountsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   automationsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   actionsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  allocatedActions?: Prisma.IntFieldUpdateOperationsInput | number
   currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -379,6 +398,7 @@ export type SubscriptionUncheckedUpdateInput = {
   accountsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   automationsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   actionsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  allocatedActions?: Prisma.IntFieldUpdateOperationsInput | number
   currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -392,6 +412,7 @@ export type SubscriptionCreateManyInput = {
   accountsUsed?: number
   automationsUsed?: number
   actionsUsed?: number
+  allocatedActions?: number
   currentPeriodStart?: Date | string | null
   currentPeriodEnd?: Date | string | null
   createdAt?: Date | string
@@ -404,6 +425,7 @@ export type SubscriptionUpdateManyMutationInput = {
   accountsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   automationsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   actionsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  allocatedActions?: Prisma.IntFieldUpdateOperationsInput | number
   currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,6 +439,7 @@ export type SubscriptionUncheckedUpdateManyInput = {
   accountsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   automationsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   actionsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  allocatedActions?: Prisma.IntFieldUpdateOperationsInput | number
   currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -435,6 +458,7 @@ export type SubscriptionCountOrderByAggregateInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
   currentPeriodStart?: Prisma.SortOrder
   currentPeriodEnd?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -444,6 +468,7 @@ export type SubscriptionAvgOrderByAggregateInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
 }
 
 export type SubscriptionMaxOrderByAggregateInput = {
@@ -454,6 +479,7 @@ export type SubscriptionMaxOrderByAggregateInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
   currentPeriodStart?: Prisma.SortOrder
   currentPeriodEnd?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -467,6 +493,7 @@ export type SubscriptionMinOrderByAggregateInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
   currentPeriodStart?: Prisma.SortOrder
   currentPeriodEnd?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -476,6 +503,7 @@ export type SubscriptionSumOrderByAggregateInput = {
   accountsUsed?: Prisma.SortOrder
   automationsUsed?: Prisma.SortOrder
   actionsUsed?: Prisma.SortOrder
+  allocatedActions?: Prisma.SortOrder
 }
 
 export type SubscriptionCreateNestedOneWithoutUserInput = {
@@ -517,6 +545,7 @@ export type SubscriptionCreateWithoutUserInput = {
   accountsUsed?: number
   automationsUsed?: number
   actionsUsed?: number
+  allocatedActions?: number
   currentPeriodStart?: Date | string | null
   currentPeriodEnd?: Date | string | null
   createdAt?: Date | string
@@ -529,6 +558,7 @@ export type SubscriptionUncheckedCreateWithoutUserInput = {
   accountsUsed?: number
   automationsUsed?: number
   actionsUsed?: number
+  allocatedActions?: number
   currentPeriodStart?: Date | string | null
   currentPeriodEnd?: Date | string | null
   createdAt?: Date | string
@@ -557,6 +587,7 @@ export type SubscriptionUpdateWithoutUserInput = {
   accountsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   automationsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   actionsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  allocatedActions?: Prisma.IntFieldUpdateOperationsInput | number
   currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -569,6 +600,7 @@ export type SubscriptionUncheckedUpdateWithoutUserInput = {
   accountsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   automationsUsed?: Prisma.IntFieldUpdateOperationsInput | number
   actionsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  allocatedActions?: Prisma.IntFieldUpdateOperationsInput | number
   currentPeriodStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   currentPeriodEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -584,6 +616,7 @@ export type SubscriptionSelect<ExtArgs extends runtime.Types.Extensions.Internal
   accountsUsed?: boolean
   automationsUsed?: boolean
   actionsUsed?: boolean
+  allocatedActions?: boolean
   currentPeriodStart?: boolean
   currentPeriodEnd?: boolean
   createdAt?: boolean
@@ -598,6 +631,7 @@ export type SubscriptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   accountsUsed?: boolean
   automationsUsed?: boolean
   actionsUsed?: boolean
+  allocatedActions?: boolean
   currentPeriodStart?: boolean
   currentPeriodEnd?: boolean
   createdAt?: boolean
@@ -612,6 +646,7 @@ export type SubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   accountsUsed?: boolean
   automationsUsed?: boolean
   actionsUsed?: boolean
+  allocatedActions?: boolean
   currentPeriodStart?: boolean
   currentPeriodEnd?: boolean
   createdAt?: boolean
@@ -626,12 +661,13 @@ export type SubscriptionSelectScalar = {
   accountsUsed?: boolean
   automationsUsed?: boolean
   actionsUsed?: boolean
+  allocatedActions?: boolean
   currentPeriodStart?: boolean
   currentPeriodEnd?: boolean
   createdAt?: boolean
 }
 
-export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "plan" | "status" | "accountsUsed" | "automationsUsed" | "actionsUsed" | "currentPeriodStart" | "currentPeriodEnd" | "createdAt", ExtArgs["result"]["subscription"]>
+export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "plan" | "status" | "accountsUsed" | "automationsUsed" | "actionsUsed" | "allocatedActions" | "currentPeriodStart" | "currentPeriodEnd" | "createdAt", ExtArgs["result"]["subscription"]>
 export type SubscriptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -655,6 +691,7 @@ export type $SubscriptionPayload<ExtArgs extends runtime.Types.Extensions.Intern
     accountsUsed: number
     automationsUsed: number
     actionsUsed: number
+    allocatedActions: number
     currentPeriodStart: Date | null
     currentPeriodEnd: Date | null
     createdAt: Date
@@ -1089,6 +1126,7 @@ export interface SubscriptionFieldRefs {
   readonly accountsUsed: Prisma.FieldRef<"Subscription", 'Int'>
   readonly automationsUsed: Prisma.FieldRef<"Subscription", 'Int'>
   readonly actionsUsed: Prisma.FieldRef<"Subscription", 'Int'>
+  readonly allocatedActions: Prisma.FieldRef<"Subscription", 'Int'>
   readonly currentPeriodStart: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly currentPeriodEnd: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Subscription", 'DateTime'>

@@ -36,7 +36,7 @@ import {
 } from "@/src/components/ui/tabs";
 import { cn } from "@/src/lib/utils";
 import { useTRPC } from "@/src/trpc/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeftIcon, ArrowRightIcon, SendIcon, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -71,6 +71,8 @@ export default function NewAutomation() {
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
+  // Get the plan details
+
   // Trigger Keywords
   const [input, setInput] = useState("");
   // Keywords
@@ -92,9 +94,19 @@ export default function NewAutomation() {
   // Add Link To The Private Message
   const [addLink, setAddLink] = useState(false);
   const trpc = useTRPC();
+
+  const { data: userSubscription, isLoading: isLoadingUserSubscription } =
+    useQuery(trpc.subscription.getUserSubscription.queryOptions());
+
+  const can_use_follow_feature: boolean =
+    userSubscription?.plan === "growth" || userSubscription?.plan === "pro"
+      ? true
+      : false;
+
   const { mutate } = useMutation(
     trpc.instagram.createAutomation.mutationOptions(),
   );
+
   const router = useRouter();
   const queryClient = useQueryClient();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -349,6 +361,9 @@ Example: If you add “price”, automation will run when someone comments “pr
                                 <FollowSwitch
                                   askForFollow={askForFollow}
                                   setAskForFollow={setAskForFollow}
+                                  can_use_follow_feature={
+                                    can_use_follow_feature
+                                  }
                                 />
                                 {askForFollow && (
                                   <FollowMessage
@@ -401,6 +416,9 @@ Example: If you add “price”, automation will run when someone comments “pr
                                 <FollowSwitch
                                   askForFollow={askForFollow}
                                   setAskForFollow={setAskForFollow}
+                                  can_use_follow_feature={
+                                    can_use_follow_feature
+                                  }
                                 />
                                 {askForFollow && (
                                   <FollowMessage

@@ -334,10 +334,8 @@ export default function PrivacyPolicyPage() {
               </h1>
               <p className="text-muted-foreground text-sm font-mono max-w-lg leading-relaxed">
                 Welcome to{" "}
-                <span className="text-primary font-medium">
-                  [Your App Name]
-                </span>
-                . This Privacy Policy explains how we collect, use, and protect
+                <span className="text-primary font-medium">ChatNinjas</span>.
+                This Privacy Policy explains how we collect, use, and protect
                 your information when you use our Instagram automation platform
                 — including automated comment replies and direct messaging via
                 Meta APIs.
@@ -542,7 +540,9 @@ export default function PrivacyPolicyPage() {
                   />
                   <p className="mt-6 text-muted-foreground/60 text-sm font-mono border-t border-border pt-5">
                     To exercise these rights, contact us at:{" "}
-                    <span className="text-primary">[your email]</span>
+                    <span className="text-primary">
+                      KARNWALANKIT89@GMAIL.COM
+                    </span>
                   </p>
                 </div>
               </section>
@@ -595,8 +595,16 @@ export default function PrivacyPolicyPage() {
                   </p>
                   <div className="space-y-3 max-w-sm">
                     {[
-                      { icon: "✉️", label: "Email", value: "[your email]" },
-                      { icon: "🌐", label: "Website", value: "[your domain]" },
+                      {
+                        icon: "✉️",
+                        label: "Email",
+                        value: "KARNWALANKIT89@GMAIL.COM",
+                      },
+                      {
+                        icon: "🌐",
+                        label: "Website",
+                        value: "https://chatninjas.in",
+                      },
                     ].map((c, i) => (
                       <div
                         key={i}
@@ -622,7 +630,7 @@ export default function PrivacyPolicyPage() {
             <div className="mt-20 pt-10 border-t border-border">
               <p className="text-muted-foreground/40 text-xs font-mono leading-relaxed">
                 By using our platform, you agree to this Privacy Policy.
-                <br />© [Your App Name] · All rights reserved.
+                <br />© ChatNinjas · All rights reserved.
               </p>
             </div>
           </main>

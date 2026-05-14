@@ -2,11 +2,12 @@ import InstagramAccountCard from "@/src/components/InstagramAccountCard";
 import { Button } from "@/src/components/ui/button";
 
 import { caller } from "@/src/trpc/server";
-import { Plus } from "lucide-react";
+import { ArrowRightIcon, Plus } from "lucide-react";
 import Link from "next/link";
 
 export default async function AccountPage() {
   const user = await caller.getUser();
+  const { subscription, plan } = await caller.getSubscriptionAndPlan();
   return (
     <div className="relative flex flex-col justify-center mt-10">
       <div className="flex gap-2 justify-between">
@@ -18,7 +19,17 @@ export default async function AccountPage() {
           </p>
         </div>
         <Button>
-          <Plus className="w-4 h-4 mr-2" /> Connect Account
+          {(subscription?.accountsUsed || 0) < (plan?.accounts || 0) ? (
+            <Link href={process.env.INSTAGRAM_LINK_URL || ""}>
+              <Button className="">Connect Instagram</Button>
+            </Link>
+          ) : (
+            <Link href={"/upgrade"}>
+              <Button className="">
+                Upgrade Now <ArrowRightIcon className="w-4 h-4" />
+              </Button>
+            </Link>
+          )}
         </Button>
       </div>
       {user && user?.instagramAccounts?.length > 0 ? (
@@ -48,10 +59,23 @@ export default async function AccountPage() {
               Connect multiple Instagram accounts and manage all your
               conversations in one place.
             </p>
-            <div>
-              <Link href={process.env.INSTAGRAM_LINK_URL || ""}>
-                <Button className="">Connect Instagram</Button>
-              </Link>
+            <div className="flex flex-col gap-2 items-center justify-center mt-5">
+              {(subscription?.accountsUsed || 0) < (plan?.accounts || 0) ? (
+                <Link href={process.env.INSTAGRAM_LINK_URL || ""}>
+                  <Button className="">Connect Instagram</Button>
+                </Link>
+              ) : (
+                <>
+                  <p className="text-sm text-muted-foreground">
+                    You have reached the maximum number of accounts.
+                  </p>
+                  <Link href={"/upgrade"}>
+                    <Button className="">
+                      Upgrade Now <ArrowRightIcon className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

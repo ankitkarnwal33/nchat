@@ -26,9 +26,9 @@ const pacifico = Pacifico({
 });
 
 export const metadata: Metadata = {
-  title: "NChat - Instagram Automation",
+  title: "ChatNinjas - Instagram Automation",
   description:
-    "NChat - Automate your Instagram replies and never miss a lead again",
+    "ChatNinjas - Automate your Instagram replies and never miss a lead again",
 };
 
 export default function RootLayout({
@@ -39,6 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
@@ -50,7 +51,7 @@ export default function RootLayout({
         pacifico.variable,
       )}
     >
-      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>
             {children}

@@ -169,7 +169,7 @@ function NavBar() {
       className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-10 h-16 border-b border-border bg-background/80 backdrop-blur-xl"
     >
       <span className="font-serif text-xl font-bold text-primary tracking-tight">
-        Nchat
+        ChatNinjas
       </span>
       <div className="flex items-center gap-3">
         <motion.button
@@ -718,20 +718,26 @@ export function Footer() {
     <footer className="border-t border-border px-6 py-10 bg-background">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <span className="font-serif text-lg font-bold text-primary">
-          InstaFlow
+          ChatNinjas
         </span>
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} InstaFlow. Built on the Official Meta
+          © {new Date().getFullYear()} ChatNinjas. Built on the Official Meta
           API. Not affiliated with Meta Platforms, Inc.
         </p>
         <div className="flex gap-5 text-xs text-muted-foreground">
-          <a href="#" className="hover:text-foreground transition-colors">
+          <a
+            href="/privacy-policy"
+            className="hover:text-foreground transition-colors"
+          >
             Privacy
           </a>
-          <a href="#" className="hover:text-foreground transition-colors">
+          <a href="/terms" className="hover:text-foreground transition-colors">
             Terms
           </a>
-          <a href="#" className="hover:text-foreground transition-colors">
+          <a
+            href="/contact"
+            className="hover:text-foreground transition-colors"
+          >
             Contact
           </a>
         </div>

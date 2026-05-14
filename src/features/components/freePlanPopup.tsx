@@ -7,7 +7,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function FreePlanPopup({ onFreePlan }: { onFreePlan: boolean }) {
-  const [open, setOpen] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(onFreePlan);
   const router = useRouter();
   const handleUpgrade = () => {
     setOpen(false);

@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ["app.wheatless.in"],
+  allowedDevOrigins: ["chatninjas.in"],
 };
 
 export default nextConfig;

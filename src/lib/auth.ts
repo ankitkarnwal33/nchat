@@ -38,7 +38,7 @@ export const auth = betterAuth({
       });
     },
   },
-  trustedOrigins: ["http://localhost:3000", "https://app.wheatless.in"],
+  trustedOrigins: ["http://localhost:3000", "https://chatninjas.in"],
 
   // After a user is signed up, create the new subscription record with Free plan
 
@@ -46,11 +46,10 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          console.log("user", user);
           await prisma.subscription.create({
             data: {
               userId: user.id,
-              plan: "Free",
+              plan: "free",
               status: "active",
             },
           });

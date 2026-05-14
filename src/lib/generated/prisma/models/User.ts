@@ -203,6 +203,7 @@ export type UserWhereInput = {
   instagramAccounts?: Prisma.InstagramAccountListRelationFilter
   automations?: Prisma.AutomationListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -218,6 +219,7 @@ export type UserOrderByWithRelationInput = {
   instagramAccounts?: Prisma.InstagramAccountOrderByRelationAggregateInput
   automations?: Prisma.AutomationOrderByRelationAggregateInput
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -236,6 +238,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   instagramAccounts?: Prisma.InstagramAccountListRelationFilter
   automations?: Prisma.AutomationListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
+  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -277,6 +280,7 @@ export type UserCreateInput = {
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -292,6 +296,7 @@ export type UserUncheckedCreateInput = {
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -307,6 +312,7 @@ export type UserUpdateInput = {
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -322,6 +328,7 @@ export type UserUncheckedUpdateInput = {
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -475,6 +482,20 @@ export type UserUpdateOneRequiredWithoutSubscriptionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionInput, Prisma.UserUpdateWithoutSubscriptionInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionInput>
 }
 
+export type UserCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.UserUpsertWithoutPaymentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentsInput, Prisma.UserUpdateWithoutPaymentsInput>, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
+}
+
 export type UserCreateWithoutInstagramAccountsInput = {
   id: string
   name: string
@@ -487,6 +508,7 @@ export type UserCreateWithoutInstagramAccountsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutInstagramAccountsInput = {
@@ -501,6 +523,7 @@ export type UserUncheckedCreateWithoutInstagramAccountsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutInstagramAccountsInput = {
@@ -531,6 +554,7 @@ export type UserUpdateWithoutInstagramAccountsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInstagramAccountsInput = {
@@ -545,6 +569,7 @@ export type UserUncheckedUpdateWithoutInstagramAccountsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -559,6 +584,7 @@ export type UserCreateWithoutSessionsInput = {
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -573,6 +599,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -603,6 +630,7 @@ export type UserUpdateWithoutSessionsInput = {
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -617,6 +645,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -631,6 +660,7 @@ export type UserCreateWithoutAccountsInput = {
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -645,6 +675,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -675,6 +706,7 @@ export type UserUpdateWithoutAccountsInput = {
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -689,6 +721,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAutomationsInput = {
@@ -703,6 +736,7 @@ export type UserCreateWithoutAutomationsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAutomationsInput = {
@@ -717,6 +751,7 @@ export type UserUncheckedCreateWithoutAutomationsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAutomationsInput = {
@@ -747,6 +782,7 @@ export type UserUpdateWithoutAutomationsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAutomationsInput = {
@@ -761,6 +797,7 @@ export type UserUncheckedUpdateWithoutAutomationsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionInput = {
@@ -775,6 +812,7 @@ export type UserCreateWithoutSubscriptionInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionInput = {
@@ -789,6 +827,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
   automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionInput = {
@@ -819,6 +858,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionInput = {
@@ -833,6 +873,83 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
   automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPaymentsInput = {
+  id: string
+  name: string
+  emailVerified?: boolean
+  email: string
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  instagramAccounts?: Prisma.InstagramAccountCreateNestedManyWithoutUserInput
+  automations?: Prisma.AutomationCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPaymentsInput = {
+  id: string
+  name: string
+  emailVerified?: boolean
+  email: string
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  instagramAccounts?: Prisma.InstagramAccountUncheckedCreateNestedManyWithoutUserInput
+  automations?: Prisma.AutomationUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+}
+
+export type UserUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPaymentsInput, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPaymentsInput, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type UserUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  instagramAccounts?: Prisma.InstagramAccountUpdateManyWithoutUserNestedInput
+  automations?: Prisma.AutomationUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  instagramAccounts?: Prisma.InstagramAccountUncheckedUpdateManyWithoutUserNestedInput
+  automations?: Prisma.AutomationUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -845,6 +962,7 @@ export type UserCountOutputType = {
   accounts: number
   instagramAccounts: number
   automations: number
+  payments: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -852,6 +970,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   instagramAccounts?: boolean | UserCountOutputTypeCountInstagramAccountsArgs
   automations?: boolean | UserCountOutputTypeCountAutomationsArgs
+  payments?: boolean | UserCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -892,6 +1011,13 @@ export type UserCountOutputTypeCountAutomationsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AutomationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -906,6 +1032,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   instagramAccounts?: boolean | Prisma.User$instagramAccountsArgs<ExtArgs>
   automations?: boolean | Prisma.User$automationsArgs<ExtArgs>
   subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
+  payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -946,6 +1073,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   instagramAccounts?: boolean | Prisma.User$instagramAccountsArgs<ExtArgs>
   automations?: boolean | Prisma.User$automationsArgs<ExtArgs>
   subscription?: boolean | Prisma.User$subscriptionArgs<ExtArgs>
+  payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -959,6 +1087,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     instagramAccounts: Prisma.$InstagramAccountPayload<ExtArgs>[]
     automations: Prisma.$AutomationPayload<ExtArgs>[]
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1367,6 +1496,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   instagramAccounts<T extends Prisma.User$instagramAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$instagramAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InstagramAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   automations<T extends Prisma.User$automationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$automationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AutomationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscription<T extends Prisma.User$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1908,6 +2038,30 @@ export type User$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.SubscriptionInclude<ExtArgs> | null
   where?: Prisma.SubscriptionWhereInput
+}
+
+/**
+ * User.payments
+ */
+export type User$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

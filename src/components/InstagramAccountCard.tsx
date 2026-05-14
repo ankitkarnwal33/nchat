@@ -33,8 +33,10 @@ export default function InstagramAccountCard({
       <CardContent className="flex justify-between gap-2">
         <div className="flex flex-col  gap-5">
           <div className="flex flex-col items-center justify-center gap-2">
-            <CardTitle>@{account.username}</CardTitle>
-            <CardDescription>{account.instagramUserId}</CardDescription>
+            <CardTitle className=" font-semibold text-primary">
+              @{account.username}
+            </CardTitle>
+            <CardDescription>ID: {account.instagramUserId}</CardDescription>
           </div>
 
           <AccountRemoveModal
@@ -53,13 +55,6 @@ export default function InstagramAccountCard({
             height={100}
             className="rounded-full border-2 shadow-sm"
           />
-          {/* <CardDescription className="text-sm text-muted-foreground flex ">
-            <span>Connected at </span>
-            <span className="font-medium">
-              &nbsp;
-              {account.connectedAt?.toLocaleDateString()}
-            </span>
-          </CardDescription> */}
 
           <Badge variant="outline">
             <span>Connected at </span>

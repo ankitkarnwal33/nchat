@@ -80,7 +80,7 @@ export default function AppSidebar({
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        {open && <h2 className="text-2xl font-bold mt-2">NChat</h2>}
+        {open && <h2 className="text-2xl font-bold mt-2">ChatNinjas</h2>}
         <SidebarTrigger
           className={cn("absolute top-3 right-2", open ? "rotate-180" : "")}
         />

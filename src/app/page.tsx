@@ -15,9 +15,9 @@ import {
 } from "./ho/page";
 
 export const metadata = {
-  title: "NChat - Instagram Automation",
+  title: "ChatNinjas - Instagram Automation",
   description:
-    "NChat - Automate your Instagram replies and never miss a lead again",
+    "ChatNinjas - Automate your Instagram replies and never miss a lead again",
 };
 
 export default async function Home() {

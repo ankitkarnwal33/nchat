@@ -6,7 +6,7 @@ import { LogInIcon } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className=" relative top-2 bg-background z-500  mx-2  max-w-4xl sm:mx-auto sm:py-1 sm:px-6 px-2 border rounded-lg shadow-sm">
+    <header className="relative top-2 bg-background z-500  mx-2  max-w-4xl sm:mx-auto sm:py-1 sm:px-6 px-2 border rounded-lg shadow-sm ">
       <div className="container mx-auto px-4 py-1 flex items-center justify-between">
         <Link href="/">
           <Image
