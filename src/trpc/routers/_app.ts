@@ -129,14 +129,13 @@ export const instagramRouter = createTRPCRouter({
         const cacheKey = `media:${activeAccountId}:cursor:${cursor ?? "first"}`;
         const cachedData = await getCache(cacheKey);
         if (cachedData) {
-          console.log("cachedData", cachedData);
           return cachedData as {
             data: InstagramMedia[];
             hasNextPage: boolean;
             cursor: string | null;
           };
         }
-        const userId = ctx.auth.session.userId;
+        const userId = ctx?.auth?.session?.userId;
         // Get the active instagram account using the active account id and the user id
         const instagramAccount = await prisma.instagramAccount.findUnique({
           where: {
@@ -176,8 +175,9 @@ export const instagramRouter = createTRPCRouter({
 
         // console.error("response", response);
         const data = await response.json();
-        if (data.error.code === 190) {
+        if (data?.error?.code === 190) {
           // Session has been expired, or user has changed the password, we need to refresh the access token
+          console.log("Running this");
         }
         // if (!response.ok) {
         //   throw new Error(response.statusText);
@@ -186,7 +186,7 @@ export const instagramRouter = createTRPCRouter({
         const result = {
           data: data.data || [],
           hasNextPage: !!data.paging?.next,
-          cursor: data.paging?.cursors?.after || null,
+          cursor: data?.paging?.cursors?.after || null,
         };
         await setCache(cacheKey, result);
 
