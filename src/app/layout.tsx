@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { Pacifico } from "next/font/google";
 import { TRPCReactProvider } from "@/src/trpc/client";
 import { ThemeProvider } from "../components/theme-provider";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -60,6 +61,7 @@ export default function RootLayout({
           </TRPCReactProvider>
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId="G-5RS63TGV63" />
     </html>
   );
 }
