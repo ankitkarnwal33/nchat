@@ -635,7 +635,10 @@ export const subscriptionRouter = createTRPCRouter({
     .input(z.object({ plan: z.string() }))
     .query(async ({ input }) => {
       try {
-        const planData = await getPlanDetails(input.plan);
+        const { plan } = input;
+        const planData = await getPlanDetails(
+          plan.charAt(0).toUpperCase() + plan.slice(1),
+        );
         if (!planData) {
           throw new Error("Plan not found");
         }
@@ -652,13 +655,15 @@ export const subscriptionRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { plan } = input;
       try {
-        const planData = await getPlanDetails(plan);
+        const planData = await getPlanDetails(
+          plan.charAt(0).toUpperCase() + plan.slice(1),
+        );
         if (!planData) {
           throw new Error("Plan not found");
         }
         const planAmount = (planData as SubscriptionPlan)?.price;
         const orderId =
-          `order_${ctx.auth.session.userId}_${Date.now()}` as string;
+          `order_${ctx?.auth?.session?.userId}_${Date.now()}` as string;
         if (!planAmount) {
           throw new Error("Plan amount not found");
         }
@@ -710,8 +715,6 @@ export const subscriptionRouter = createTRPCRouter({
             status: "CREATED",
           },
         });
-
-        console.log("response.data", response.data);
 
         return response.data;
       } catch (error) {
