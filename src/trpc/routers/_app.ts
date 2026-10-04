@@ -129,6 +129,7 @@ export const instagramRouter = createTRPCRouter({
         const cacheKey = `media:${activeAccountId}:cursor:${cursor ?? "first"}`;
         const cachedData = await getCache(cacheKey);
         if (cachedData) {
+          console.log("cachedData", cachedData);
           return cachedData as {
             data: InstagramMedia[];
             hasNextPage: boolean;
@@ -172,10 +173,16 @@ export const instagramRouter = createTRPCRouter({
         const response = await fetch(url, {
           method: "GET",
         });
+
+        // console.error("response", response);
         const data = await response.json();
-        if (!response.ok) {
-          throw new Error(response.statusText);
+        if (data.error.code === 190) {
+          // Session has been expired, or user has changed the password, we need to refresh the access token
         }
+        // if (!response.ok) {
+        //   throw new Error(response.statusText);
+        // }
+
         const result = {
           data: data.data || [],
           hasNextPage: !!data.paging?.next,
@@ -760,6 +767,92 @@ export const subscriptionRouter = createTRPCRouter({
           (error as Error).message || "Failed to get payment status.",
         );
       }
+    }),
+
+  getUserPayments: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(50).optional(),
+        cursor: z
+          .object({
+            id: z.string(),
+            createdAt: z.coerce.date(),
+          })
+          .nullish(),
+
+        status: z.enum(["PAID", "FAILED", "all"]).optional(),
+        sort: z.enum(["desc", "asc"]).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      console.log("input", input);
+      const redisKey = `automations:${ctx.auth.session.userId}:${
+        (await cookies()).get("activeAccountId")?.value
+      }:${input.status || "all"}:${
+        input.sort || "desc"
+      }:${input.cursor?.id || "first"}`;
+      const limit = input.limit ?? 10;
+      const cachedData = await getCache(redisKey);
+      if (cachedData) {
+        console.log("Cached data found");
+        return cachedData;
+      }
+      const payments = await prisma.payment.findMany({
+        where: {
+          userId: ctx.auth.session.userId,
+          // Get only paid, and failed payments
+          ...(input.status === "all" && {
+            status: {
+              in: ["PAID", "FAILED"],
+            },
+          }),
+
+          ...(input.cursor && {
+            OR: [
+              {
+                createdAt: {
+                  lt: input.cursor.createdAt,
+                },
+              },
+              {
+                createdAt: input.cursor.createdAt,
+                id: {
+                  lt: input.cursor.id,
+                },
+              },
+            ],
+          }),
+
+          ...(input.status === "PAID" && { status: "PAID" }),
+          ...(input.status === "FAILED" && { status: "FAILED" }),
+        },
+        take: limit + 1, // fetch one extra to check if there is next page
+        orderBy: [
+          { createdAt: input.sort ?? "desc" },
+          { id: input.sort ?? "desc" },
+        ],
+      });
+
+      let nextCursor: typeof input.cursor | undefined = undefined;
+
+      if (payments.length > limit) {
+        payments.pop();
+        const nextItem = payments[payments.length - 1];
+
+        nextCursor = {
+          id: nextItem!.id,
+          createdAt: nextItem!.createdAt,
+        };
+      }
+
+      await setCache(redisKey, { payments, nextCursor }, 60 * 5); // 5 minutes
+
+      console.log("payments", payments);
+
+      return {
+        payments,
+        nextCursor,
+      };
     }),
 });
 

@@ -24,7 +24,11 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { TbRadioactiveOff } from "react-icons/tb";
 
-export default function Filter() {
+export default function Filter({
+  type = "automations",
+}: {
+  type?: "payments" | "automations";
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const search = searchParams.get("search") ?? "";
@@ -89,7 +93,7 @@ export default function Filter() {
         </InputGroup>
       </div>
       <div className="flex-1">
-        <DropdownMenuSubmenu updateParams={updateParams} />
+        <DropdownMenuSubmenu updateParams={updateParams} type={type} />
       </div>
     </div>
   );
@@ -97,7 +101,9 @@ export default function Filter() {
 
 export function DropdownMenuSubmenu({
   updateParams,
+  type,
 }: {
+  type?: "payments" | "automations";
   updateParams: (key: string, value: string) => void;
 }) {
   const [status, setStatus] = useState<string>("all");
@@ -125,37 +131,74 @@ export function DropdownMenuSubmenu({
               Status
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                {/* <DropdownMenuItem onClick={() => updateParams("status", "all")}>
-                  All
-                </DropdownMenuItem> */}
-                <DropdownMenuCheckboxItem
-                  checked={status === "all" ? true : false}
-                  onCheckedChange={(checked) => setStatus(checked ? "all" : "")}
-                >
-                  All
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem
-                  checked={status === "active" ? true : false}
-                  onCheckedChange={(checked) =>
-                    setStatus(checked ? "active" : "")
-                  }
-                >
-                  <TbRadioactiveFilled className="w-4 h-4" />
-                  Active
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem
-                  checked={status === "inactive" ? true : false}
-                  onCheckedChange={(checked) =>
-                    setStatus(checked ? "inactive" : "")
-                  }
-                >
-                  <TbRadioactiveOff className="w-4 h-4" />
-                  Inactive
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuSubContent>
+              {type === "automations" ? (
+                <>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuCheckboxItem
+                      checked={status === "all" ? true : false}
+                      onCheckedChange={(checked) =>
+                        setStatus(checked ? "all" : "")
+                      }
+                    >
+                      All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={status === "active" ? true : false}
+                      onCheckedChange={(checked) =>
+                        setStatus(checked ? "active" : "")
+                      }
+                    >
+                      <TbRadioactiveFilled className="w-4 h-4" />
+                      Active
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={status === "inactive" ? true : false}
+                      onCheckedChange={(checked) =>
+                        setStatus(checked ? "inactive" : "")
+                      }
+                    >
+                      <TbRadioactiveOff className="w-4 h-4" />
+                      Inactive
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuSubContent>
+                </>
+              ) : (
+                <>
+                  {/* Payment Status */}
+                  <DropdownMenuSubContent>
+                    <DropdownMenuCheckboxItem
+                      checked={status === "all" ? true : false}
+                      onCheckedChange={(checked) =>
+                        setStatus(checked ? "all" : "")
+                      }
+                    >
+                      All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={status === "PAID" ? true : false}
+                      onCheckedChange={(checked) =>
+                        setStatus(checked ? "PAID" : "")
+                      }
+                    >
+                      <TbRadioactiveFilled className="w-4 h-4" />
+                      Paid
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      checked={status === "FAILED" ? true : false}
+                      onCheckedChange={(checked) =>
+                        setStatus(checked ? "FAILED" : "")
+                      }
+                    >
+                      <TbRadioactiveOff className="w-4 h-4" />
+                      Failed
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuSubContent>
+                </>
+              )}
             </DropdownMenuPortal>
           </DropdownMenuSub>
           <DropdownMenuSub>

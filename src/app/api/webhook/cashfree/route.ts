@@ -7,13 +7,14 @@ export async function POST(req: NextRequest) {
   // This webhook is called only when the payment is successful
   try {
     const body = await req.json();
-    console.log("body", body);
+
+    if (!body?.data?.payment?.cf_payment_id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const orderId = body?.data?.order?.order_id;
     const paymentStatus = body?.data?.payment?.payment_status;
 
     const paymentMethod = body?.data?.payment?.payment_group;
-
-    console.log("Offer: ", body?.data?.payment_offers);
 
     if (!orderId) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest) {
           status: "PAID",
           paymentId: `${body?.data?.payment?.cf_payment_id}` || null,
           method: paymentMethod,
+          offer: body?.data?.payment_offers || null,
         },
       });
 
