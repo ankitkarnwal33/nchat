@@ -18,6 +18,7 @@ import {
   Subscription,
   SubscriptionPlan,
 } from "@/src/lib/generated/prisma/client";
+import { extractUserId } from "@/src/lib/userIdHelper";
 
 export const getPlanDetails = async (
   plan: string,
@@ -952,12 +953,7 @@ export const appRouter = createTRPCRouter({
         if (!response.ok) {
           throw new Error(await response.text());
         }
-        // ADDED LATER
-        const raw = await response.text();
-        console.log(raw); // actual user_id
-        console.log(JSON.parse(raw).user_id);
 
-        // ADDED LATER
         const data = await response.json();
         // Get the access token and userId from the data
         const shortToken = data.access_token;
@@ -993,12 +989,16 @@ export const appRouter = createTRPCRouter({
           throw new Error(await igUserResponse.text());
         }
 
-        const igUser = await igUserResponse.json();
+        const igUserRaw = await igUserResponse.text(); // read once, as text
+        const igUser = JSON.parse(igUserRaw); // fine for username / picture
+        const instagramUserId = extractUserId(igUserRaw); // exact ID as string
+
+        // const igUser = await igUserResponse.json();
 
         const existingInstagramAccount =
           await prisma.instagramAccount.findUnique({
             where: {
-              instagramUserId: igUser.user_id,
+              instagramUserId,
             },
           });
 
@@ -1022,7 +1022,7 @@ export const appRouter = createTRPCRouter({
         // Subscribe to the webhook for this perticular account
 
         const webhookResponse = await fetch(
-          `https://graph.instagram.com/v25.0/${igUser.user_id}/subscribed_apps?access_token=${access_token}&subscribed_fields=comments,messages`,
+          `https://graph.instagram.com/v25.0/${instagramUserId}/subscribed_apps?access_token=${access_token}&subscribed_fields=comments,messages`,
           {
             method: "POST",
           },
@@ -1037,7 +1037,7 @@ export const appRouter = createTRPCRouter({
           data: {
             userId: ctx.auth.session.userId, //  logged-in user
 
-            instagramUserId: igUser.user_id,
+            instagramUserId,
             profilePicture: igUser.profile_picture_url,
             username: igUser.username,
 
