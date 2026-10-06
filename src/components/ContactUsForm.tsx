@@ -1,6 +1,8 @@
 "use client";
 
 import { Input } from "@/src/components/ui/input";
+import { Checkbox } from "@/src/components/ui/checkbox";
+import Link from "next/link";
 import {
   InputGroup,
   InputGroupAddon,
@@ -31,7 +33,13 @@ import ButtonLoading from "./ButtonLoading";
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.email("Invalid email address"),
-  message: z.string().min(1, "Message is required"),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .max(100, "Message must be 100 characters or less"),
+  isTermsAccepted: z
+    .boolean()
+    .refine((val) => val === true, "You must accept the terms and conditions"),
 });
 export type FormSchema = z.infer<typeof formSchema>;
 export default function ContactUsForm() {
@@ -45,6 +53,7 @@ export default function ContactUsForm() {
       name: "",
       email: "",
       message: "",
+      isTermsAccepted: false,
     },
   });
   const trpc = useTRPC();
@@ -53,7 +62,7 @@ export default function ContactUsForm() {
 
   const onSubmit = async (data: FormSchema) => {
     setButtonState("loading");
-    await mutate(
+    mutate(
       {
         name: data.name,
         email: data.email,
@@ -181,6 +190,52 @@ export default function ContactUsForm() {
             </Field>
           )}
         ></Controller>
+        <Controller
+          name="isTermsAccepted"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="form-terms"
+                  name={field.name}
+                  checked={field.value}
+                  onCheckedChange={(checked) =>
+                    field.onChange(checked === true)
+                  }
+                  onBlur={field.onBlur}
+                  aria-invalid={fieldState.invalid}
+                  className="mt-0.5"
+                />
+                <FieldLabel
+                  htmlFor="form-terms"
+                  className="text-sm font-normal leading-snug"
+                >
+                  <span>
+                    I agree to the{" "}
+                    <Link
+                      href="/terms"
+                      target="_blank"
+                      className="text-primary underline"
+                    >
+                      Terms and Conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      href="/privacy-policy"
+                      target="_blank"
+                      className="text-primary underline"
+                    >
+                      Privacy Policy
+                    </Link>{" "}
+                    <span className="text-red-500">*</span>
+                  </span>
+                </FieldLabel>
+              </div>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
       </FieldGroup>
       <ButtonLoading
         idle="Submit"

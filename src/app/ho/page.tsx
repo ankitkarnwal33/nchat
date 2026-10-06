@@ -667,10 +667,10 @@ export function Footer() {
             Terms
           </Link>
           <Link
-            href="/contact"
+            href="/contact-us"
             className="hover:text-foreground transition-colors"
           >
-            Contact
+            Contact Us
           </Link>
         </div>
       </div>
