@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Hero from "@/src/components/Hero";
+import Link from "next/link";
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -137,18 +138,21 @@ const pricing = [
     tagline: "For individuals getting started",
     price: "Free trial",
     highlight: false,
+    link: "/login",
   },
   {
     tier: "Growth",
     tagline: "For scaling businesses",
     price: "Pro features",
     highlight: true,
+    link: "/login",
   },
   {
     tier: "Agency",
     tagline: "For agencies & high-volume automation",
     price: "Unlimited",
     highlight: false,
+    link: "/login",
   },
 ];
 
@@ -192,88 +196,7 @@ function NavBar() {
 }
 
 function HeroSection() {
-  return (
-    // <section className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-6 py-24 overflow-hidden">
-    //   {/* Radial glow */}
-    //   <div
-    //     className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
-    //     style={{
-    //       background:
-    //         "radial-gradient(circle, color-mix(in oklch, var(--primary) 20%, transparent) 0%, transparent 68%)",
-    //     }}
-    //   />
-
-    //   <Section className="relative z-10 flex flex-col items-center gap-6 max-w-3xl mx-auto">
-    //     <motion.span
-    //       variants={fadeUp}
-    //       className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-accent text-accent-foreground border border-border"
-    //     >
-    //       🔒 Official Meta API · Zero Ban Risk
-    //     </motion.span>
-
-    //     <motion.h1
-    //       variants={fadeUp}
-    //       custom={1}
-    //       className="font-serif text-5xl md:text-7xl font-extrabold leading-[1.08] tracking-tight text-foreground"
-    //     >
-    //       Instagram Automation{" "}
-    //       <span className="text-primary">That Won&apos;t</span> Get You Banned
-    //     </motion.h1>
-
-    //     <motion.p
-    //       variants={fadeUp}
-    //       custom={2}
-    //       className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed"
-    //     >
-    //       Built entirely on the official Meta Graph API — no shady bots, no
-    //       scraping, no risk. Scale your engagement while staying fully
-    //       compliant.
-    //     </motion.p>
-
-    //     <motion.div
-    //       variants={fadeUp}
-    //       custom={3}
-    //       className="flex flex-col sm:flex-row gap-3 mt-2"
-    //     >
-    //       <motion.button
-    //         whileHover={{ scale: 1.04 }}
-    //         whileTap={{ scale: 0.97 }}
-    //         className="px-7 py-3.5 rounded-[var(--radius)] bg-primary text-primary-foreground font-bold text-base cursor-pointer hover:opacity-90 transition-opacity shadow-md"
-    //       >
-    //         Start for Free →
-    //       </motion.button>
-    //       <motion.button
-    //         whileHover={{ scale: 1.03 }}
-    //         whileTap={{ scale: 0.97 }}
-    //         className="px-7 py-3.5 rounded-[var(--radius)] border border-border bg-transparent text-foreground font-semibold text-base cursor-pointer hover:bg-secondary transition-colors"
-    //       >
-    //         See How It Works
-    //       </motion.button>
-    //     </motion.div>
-
-    //     <motion.div
-    //       variants={fadeUp}
-    //       custom={4}
-    //       className="flex flex-wrap justify-center gap-2 mt-4"
-    //     >
-    //       {[
-    //         "✅ Meta Compliant",
-    //         "🚫 No Bans",
-    //         "⚡ Instant Setup",
-    //         "📊 Real Analytics",
-    //       ].map((pill) => (
-    //         <span
-    //           key={pill}
-    //           className="px-3 py-1 rounded-full text-xs font-semibold bg-secondary text-secondary-foreground border border-border"
-    //         >
-    //           {pill}
-    //         </span>
-    //       ))}
-    //     </motion.div>
-    //   </Section>
-    // </section>
-    <Hero />
-  );
+  return <Hero />;
 }
 
 export function ProblemSection() {
@@ -362,15 +285,17 @@ export function SolutionSection() {
               infrastructure Meta itself relies on. This is how Instagram
               automation is meant to be done.
             </motion.p>
-            <motion.button
-              variants={fadeUp}
-              custom={3}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              className="self-start px-6 py-3 rounded-[var(--radius)] bg-primary text-primary-foreground font-bold text-sm cursor-pointer hover:opacity-90 transition-opacity"
-            >
-              Start Building →
-            </motion.button>
+            <Link href="/login">
+              <motion.button
+                variants={fadeUp}
+                custom={3}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                className="self-start px-6 py-3 rounded-[var(--radius)] bg-primary text-primary-foreground font-bold text-sm cursor-pointer hover:opacity-90 transition-opacity"
+              >
+                Start Building →
+              </motion.button>
+            </Link>
           </div>
 
           <div className="flex flex-col gap-4">
@@ -644,17 +569,19 @@ export function PricingSection() {
               >
                 {p.price}
               </div>
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                className={`mt-auto w-full py-2.5 rounded-[var(--radius)] font-bold text-sm cursor-pointer transition-all ${
-                  p.highlight
-                    ? "bg-primary-foreground text-primary hover:opacity-90"
-                    : "border border-border bg-transparent text-foreground hover:bg-secondary"
-                }`}
-              >
-                Get Started
-              </motion.button>
+              <Link href={p.link}>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`mt-auto w-full py-2.5 rounded-[var(--radius)] font-bold text-sm cursor-pointer transition-all ${
+                    p.highlight
+                      ? "bg-primary-foreground text-primary hover:opacity-90"
+                      : "border border-border bg-transparent text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  Get Started
+                </motion.button>
+              </Link>
             </motion.div>
           ))}
         </div>
@@ -693,13 +620,15 @@ export function CTASection() {
           custom={2}
           className="flex flex-col sm:flex-row gap-3 justify-center mt-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            className="px-8 py-4 rounded-[var(--radius)] bg-primary text-primary-foreground font-black text-base cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
-          >
-            Start for Free — No Card Required
-          </motion.button>
+          <Link href={"/sign-up"}>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-8 py-4 rounded-[var(--radius)] bg-primary text-primary-foreground font-black text-base cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
+            >
+              Start for Free — No Card Required
+            </motion.button>
+          </Link>
         </motion.div>
         <motion.p
           variants={fadeUp}
@@ -725,21 +654,24 @@ export function Footer() {
           API. Not affiliated with Meta Platforms, Inc.
         </p>
         <div className="flex gap-5 text-xs text-muted-foreground">
-          <a
+          <Link
             href="/privacy-policy"
             className="hover:text-foreground transition-colors"
           >
             Privacy
-          </a>
-          <a href="/terms" className="hover:text-foreground transition-colors">
+          </Link>
+          <Link
+            href="/terms"
+            className="hover:text-foreground transition-colors"
+          >
             Terms
-          </a>
-          <a
+          </Link>
+          <Link
             href="/contact"
             className="hover:text-foreground transition-colors"
           >
             Contact
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

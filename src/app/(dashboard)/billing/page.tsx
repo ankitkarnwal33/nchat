@@ -208,9 +208,16 @@ export default function AllAutomationList({
         (data.pages[0] as { payments: Payment[] }).payments.length === 0 &&
         !isFetching && (
           <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-            <div className="text-4xl">⚡</div>
-            <h2 className="text-xl font-semibold">No Automations Yet</h2>
-            <p className="text-muted-foreground max-w-md">No payments found.</p>
+            <div className="text-4xl"></div>
+            <p className="text-muted-foreground max-w-md">
+              No transaction history found for your account.
+            </p>
+            <Link
+              href="/upgrade"
+              className="flex items-center gap-2 text-sm hover:scale-105 transition-all duration-300 bg-primary text-primary-foreground px-4 py-2 rounded-md font-semibold"
+            >
+              Upgrade Now <ArrowRightIcon className="w-4 h-4" />
+            </Link>
           </div>
         )}
     </div>

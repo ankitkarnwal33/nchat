@@ -106,8 +106,8 @@ export default function RegisterForm() {
   const isPending = form.formState.isSubmitting;
 
   return (
-    <div className="flex min-h-svh items-center justify-center">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-svh items-center my-10 justify-center">
+      <Card className="w-full max-w-xl">
         <CardHeader className="text-center">
           <CardTitle>Create an account</CardTitle>
           <CardDescription>Create an account to get started</CardDescription>
@@ -151,7 +151,12 @@ export default function RegisterForm() {
                   Continue with Github
                 </Button>
               </div>
-              <Separator />
+              <div className="relative flex items-center justify-center ">
+                <Separator className={"absolute"} />
+                <p className="text-center bg-white dark:bg-gray-800 z-1 font-semibold px-4 py-1">
+                  OR
+                </p>
+              </div>
               <div className="grid gap-4">
                 <Controller
                   control={form.control}

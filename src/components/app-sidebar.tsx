@@ -44,11 +44,6 @@ const menuItems = [
         href: "/account",
         icon: FaInstagram,
       },
-      {
-        title: "Contacts",
-        href: "/contacts",
-        icon: UsersIcon,
-      },
     ],
   },
 ];
