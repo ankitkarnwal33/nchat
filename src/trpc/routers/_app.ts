@@ -957,7 +957,7 @@ export const appRouter = createTRPCRouter({
         // Get the access token and userId from the data
         const shortToken = data.access_token;
 
-        const raw = await data.text();
+        const raw = await response.text();
         console.log(raw); // actual user_id
         console.log(JSON.parse(raw).user_id);
         // const userId = data.user_id;
