@@ -955,9 +955,24 @@ export const appRouter = createTRPCRouter({
           throw new Error(await response.text());
         }
 
-        const data = await response.json();
-        // Get the access token and userId from the data
+        const raw1 = await response.text();
+        const data = JSON.parse(raw1);
         const shortToken = data?.access_token;
+        console.log(
+          "Token response keys:",
+          Object.keys(data),
+          "permissions:",
+          data.permissions,
+        );
+
+        const testRes = await fetch(
+          `https://graph.instagram.com/v25.0/me?fields=username,account_type&access_token=${shortToken}`,
+        );
+        console.log("Short token /me:", testRes.status, await testRes.text());
+
+        // const data = await response.json();
+        // Get the access token and userId from the data
+        // const shortToken = data?.access_token;
 
         // const userId = data.user_id;
         // Save the access token and userId to the database
