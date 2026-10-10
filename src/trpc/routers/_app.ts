@@ -951,12 +951,13 @@ export const appRouter = createTRPCRouter({
           },
         );
         if (!response.ok) {
+          console.log("Throwing error in accesss token : ");
           throw new Error(await response.text());
         }
 
         const data = await response.json();
         // Get the access token and userId from the data
-        const shortToken = data.access_token;
+        const shortToken = data?.access_token;
 
         // const userId = data.user_id;
         // Save the access token and userId to the database
@@ -969,6 +970,7 @@ export const appRouter = createTRPCRouter({
         );
 
         if (!permanentAccessTokenResponse.ok) {
+          console.log("Throwing error here in permanernAccesssToken.");
           throw new Error(await permanentAccessTokenResponse.text());
         }
 
@@ -986,6 +988,7 @@ export const appRouter = createTRPCRouter({
           },
         );
         if (!igUserResponse.ok) {
+          console.log("Throwing error in igUserResponse");
           throw new Error(await igUserResponse.text());
         }
 
@@ -1017,7 +1020,7 @@ export const appRouter = createTRPCRouter({
               tokenExpiresAt: new Date(Date.now() + expires_in * 1000),
             },
           });
-          throw new Error("This Instagram account is already connected.");
+          return { success: true };
         }
 
         // Subscribe to the webhook for this perticular account
