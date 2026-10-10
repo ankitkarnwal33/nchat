@@ -992,7 +992,8 @@ export const appRouter = createTRPCRouter({
         const igUserRaw = await igUserResponse.text(); // read once, as text
         const igUser = JSON.parse(igUserRaw); // fine for username / picture
         const instagramUserId = extractUserId(igUserRaw); // exact ID as string
-
+        console.log("Ig User: ", igUser);
+        console.log("Instagram user id: ", instagramUserId);
         // const igUser = await igUserResponse.json();
 
         const existingInstagramAccount =
