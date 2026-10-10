@@ -957,6 +957,7 @@ export const appRouter = createTRPCRouter({
 
         const raw1 = await response.text();
         const data = JSON.parse(raw1);
+        console.log(data);
         const shortToken = data?.access_token;
         console.log(
           "Token response keys:",
