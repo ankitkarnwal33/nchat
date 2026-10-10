@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Hero from "@/src/components/Hero";
 import Link from "next/link";
+import Image from "next/image";
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -164,32 +165,42 @@ const useCases = [
 ];
 
 // ─── Sub-Components ───────────────────────────────────────────────────────────
-function NavBar() {
+export function NavBar() {
   return (
     <motion.nav
       initial={{ y: -56, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-10 h-16 border-b border-border bg-background/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-10  border-b py-2 border-border bg-background/80 backdrop-blur-xl"
     >
-      <span className="font-serif text-xl font-bold text-primary tracking-tight">
-        ChatNinjas
-      </span>
-      <div className="flex items-center gap-3">
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className="px-4 py-1.5 rounded-[var(--radius)] border border-border text-sm text-foreground bg-transparent hover:bg-secondary transition-colors cursor-pointer"
-        >
-          Log in
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.97 }}
-          className="px-4 py-1.5 rounded-[var(--radius)] bg-primary text-primary-foreground text-sm font-semibold cursor-pointer hover:opacity-90 transition-opacity"
-        >
-          Get Started Free
-        </motion.button>
+      <Link href={"/"}>
+        <Image
+          src={"/chatninjas.in.png"}
+          width={200}
+          height={200}
+          alt="Chatninjas.in"
+          className="w-32"
+        />
+      </Link>
+      <div className="flex items-center gap-4">
+        <Link href={"/login"}>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="px-4 py-1.5 rounded-[var(--radius)] border border-border text-sm text-foreground bg-transparent hover:bg-secondary transition-colors cursor-pointer"
+          >
+            Log in
+          </motion.button>
+        </Link>
+        <Link href={"/sign-up"}>
+          <motion.button
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="px-4 py-1.5 rounded-[var(--radius)] bg-primary text-primary-foreground text-sm font-semibold cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            Get Started Free
+          </motion.button>
+        </Link>
       </div>
     </motion.nav>
   );
@@ -646,9 +657,15 @@ export function Footer() {
   return (
     <footer className="border-t border-border px-6 py-10 bg-background">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <span className="font-serif text-lg font-bold text-primary">
-          ChatNinjas
-        </span>
+        <Link href={"/"}>
+          <Image
+            src={"/chatninjas.in.png"}
+            width={200}
+            height={200}
+            alt="Chatninjas.in"
+            className="w-32"
+          />
+        </Link>
         <p className="text-xs text-muted-foreground">
           © {new Date().getFullYear()} ChatNinjas. Built on the Official Meta
           API. Not affiliated with Meta Platforms, Inc.
@@ -675,24 +692,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  );
-}
-
-// ─── Page Root ────────────────────────────────────────────────────────────────
-export default function LandingPage() {
-  return (
-    <div className="bg-background text-foreground font-sans min-h-screen overflow-x-hidden">
-      <NavBar />
-      <HeroSection />
-      <ProblemSection />
-      <SolutionSection />
-      <FeaturesSection />
-      <ComplianceSection />
-      <HowItWorksSection />
-      <ResultsSection />
-      <PricingSection />
-      <CTASection />
-      <Footer />
-    </div>
   );
 }

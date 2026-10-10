@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Header from "@/src/components/Header";
+import { Footer } from "@/src/components/HomePage";
 
 const NAV_ITEMS = [
   { id: "description", number: "01", label: "Description of Service" },
@@ -169,7 +170,6 @@ export default function TermsAndConditionsPage() {
       `}</style>
 
       <div className="min-h-screen bg-background text-foreground">
-        <Header />
         {/* ── Mobile header ── */}
         <div className="lg:hidden sticky top-0 z-50 flex items-center justify-between px-5 py-4 bg-background/90 backdrop-blur border-b border-border">
           <span className="font-display text-foreground text-base font-semibold">
@@ -611,16 +611,9 @@ export default function TermsAndConditionsPage() {
                 </div>
               </section>
             </div>
-
-            {/* Footer */}
-            <div className="mt-20 pt-10 border-t border-border">
-              <p className="text-muted-foreground/40 text-xs font-mono leading-relaxed">
-                By using our platform, you agree to these Terms and Conditions.
-                <br />© ChatNinjas · All rights reserved.
-              </p>
-            </div>
           </main>
         </div>
+        <Footer />
       </div>
     </>
   );

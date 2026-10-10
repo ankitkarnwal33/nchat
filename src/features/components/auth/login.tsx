@@ -33,7 +33,6 @@ import { useState } from "react";
 import { authClient } from "@/src/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Header from "@/src/components/Header";
 
 const loginSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -74,8 +73,7 @@ export default function Login() {
 
   return (
     <>
-      <Header />
-      <div className="flex min-h-svh items-center justify-center">
+      <div className="flex py-10 items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle>Welcome back</CardTitle>

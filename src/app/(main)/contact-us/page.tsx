@@ -1,7 +1,7 @@
 import ContactUsForm from "@/src/components/ContactUsForm";
 import { Metadata } from "next";
-import { Footer } from "../ho/page";
 import Header from "@/src/components/Header";
+import { Footer } from "@/src/components/HomePage";
 
 export const metadata: Metadata = {
   title: "Contact Us | ChatNinjas",
@@ -25,7 +25,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="w-full">
-      <Header />
       <section className="bg-primary/3 flex flex-col md:flex-row px-5 md:px-10 mt-5 md:py-20 py-10 gap-10">
         <div className="container mx-auto py-10 flex-1 ">
           <h1 className="text-4xl font-bold mb-5">Contact Us</h1>

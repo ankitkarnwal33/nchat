@@ -1,6 +1,5 @@
-import { Button } from "../components/ui/button";
 import { ArrowRightIcon } from "lucide-react";
-import Header from "../components/Header";
+
 import Link from "next/link";
 import Hero from "@/src/components/Hero";
 import {
@@ -12,7 +11,8 @@ import {
   SolutionSection,
   CTASection,
   Footer,
-} from "./ho/page";
+} from "@/src/components/HomePage";
+import { Button } from "@/src/components/ui/button";
 
 export const metadata = {
   title: "ChatNinjas - Instagram Automation",
@@ -23,7 +23,6 @@ export const metadata = {
 export default async function Home() {
   return (
     <div className="h-screen w-full relative">
-      <Header />
       {/* Dashed Top Fade Grid */}
       <div
         className="absolute inset-0 z-0"

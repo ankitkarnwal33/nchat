@@ -1,5 +1,6 @@
 "use client";
 
+import { Footer } from "@/src/components/HomePage";
 import { useState, useEffect, useRef } from "react";
 
 const NAV_ITEMS = [
@@ -625,16 +626,9 @@ export default function PrivacyPolicyPage() {
                 </div>
               </section>
             </div>
-
-            {/* Footer */}
-            <div className="mt-20 pt-10 border-t border-border">
-              <p className="text-muted-foreground/40 text-xs font-mono leading-relaxed">
-                By using our platform, you agree to this Privacy Policy.
-                <br />© ChatNinjas · All rights reserved.
-              </p>
-            </div>
           </main>
         </div>
+        <Footer />
       </div>
     </>
   );

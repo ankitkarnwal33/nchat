@@ -5,8 +5,8 @@ import { cn } from "@/src/lib/utils";
 import { Toaster } from "sonner";
 import { Pacifico } from "next/font/google";
 import { TRPCReactProvider } from "@/src/trpc/client";
-import { ThemeProvider } from "../components/theme-provider";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { ThemeProvider } from "../components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -52,11 +52,27 @@ export default function RootLayout({
         pacifico.variable,
       )}
     >
+      <head>
+        <link
+          rel="icon"
+          type="image/png"
+          href="/favicon-96x96.png"
+          sizes="96x96"
+        />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <meta name="apple-mobile-web-app-title" content="ChatNinjas" />
+        <link rel="manifest" href="/site.webmanifest" />
+      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>
             {children}
-
             <Toaster position="bottom-right" />
           </TRPCReactProvider>
         </ThemeProvider>
