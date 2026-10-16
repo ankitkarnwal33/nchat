@@ -23,5 +23,4 @@ export async function POST(req: NextRequest) {
   // Queue the event to be processed in the background
   await instagramEventQueue.add("process_webhook_event", body.entry[0]);
   return NextResponse.json({ status: 200 });
-  // IMPORTANT: Always return 200 fast_
 }
