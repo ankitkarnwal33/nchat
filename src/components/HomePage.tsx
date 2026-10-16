@@ -171,7 +171,7 @@ export function NavBar() {
       initial={{ y: -56, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-10  border-b py-2 border-border bg-background/80 backdrop-blur-xl"
+      className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-10  border-b py-2 border-border bg-background/80 backdrop-blur-xl"
     >
       <Link href={"/"}>
         <Image
@@ -179,15 +179,15 @@ export function NavBar() {
           width={200}
           height={200}
           alt="Chatninjas.in"
-          className="w-32"
+          className="w-24 md:w-32"
         />
       </Link>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         <Link href={"/login"}>
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="px-4 py-1.5 rounded-[var(--radius)] border border-border text-sm text-foreground bg-transparent hover:bg-secondary transition-colors cursor-pointer"
+            className="px-4 py-1.5 rounded-lg border border-border text-[13px] sm:text-sm text-foreground bg-transparent hover:bg-secondary transition-colors cursor-pointer"
           >
             Log in
           </motion.button>
@@ -196,7 +196,7 @@ export function NavBar() {
           <motion.button
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            className="px-4 py-1.5 rounded-[var(--radius)] bg-primary text-primary-foreground text-sm font-semibold cursor-pointer hover:opacity-90 transition-opacity"
+            className="px-4 py-1.5 rounded-lg bg-primary text-primary-foreground text-[13px] sm:text-sm font-semibold cursor-pointer hover:opacity-90 transition-opacity"
           >
             Get Started Free
           </motion.button>
@@ -204,10 +204,6 @@ export function NavBar() {
       </div>
     </motion.nav>
   );
-}
-
-function HeroSection() {
-  return <Hero />;
 }
 
 export function ProblemSection() {

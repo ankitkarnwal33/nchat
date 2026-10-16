@@ -10,14 +10,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
-  SidebarTrigger,
 } from "./ui/sidebar";
 import {
   CreditCardIcon,
   HomeIcon,
   LogOutIcon,
   StarIcon,
-  UsersIcon,
   ZapIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -49,12 +47,12 @@ const menuItems = [
 ];
 
 import { usePathname, useRouter } from "next/navigation";
-import { useSidebar } from "@/src/components/ui/sidebar";
 
 import { authClient } from "../lib/auth-client";
 import { toast } from "sonner";
 
 import AccountChange from "./AccountChange";
+import Image from "next/image";
 
 export default function AppSidebar({
   instagramAccounts,
@@ -69,19 +67,21 @@ export default function AppSidebar({
   activeAccountId: string | null;
 }) {
   const pathname = usePathname();
-  const { open } = useSidebar();
   const router = useRouter();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        {open && <h2 className="text-2xl font-bold mt-2">ChatNinjas</h2>}
-        <SidebarTrigger
-          className={cn("absolute top-3 right-2", open ? "rotate-180" : "")}
+        <Image
+          src={"/chatninjas.in.png"}
+          width={200}
+          height={200}
+          alt="Chatninjas.in"
+          className="w-24"
         />
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu className={cn(!open ? "mt-10" : "")}>
+        <SidebarMenu>
           {instagramAccounts.length > 0 ? (
             <SidebarGroup>
               <SidebarGroupContent>
