@@ -281,9 +281,9 @@ export default function AutomationEdit({
                     <div className="flex gap-4">
                       <Image
                         src={
-                          mediaData.media_type === "VIDEO"
-                            ? mediaData.thumbnail_url
-                            : mediaData.media_url
+                          mediaData?.media_type === "VIDEO"
+                            ? mediaData?.thumbnail_url || ""
+                            : mediaData?.media_url || ""
                         }
                         alt="Automation Image"
                         width={150}
@@ -580,9 +580,9 @@ Example: If you add “price”, automation will run when someone comments “pr
                   <IphoneHome
                     username={mediaData.username || ""}
                     imageUrl={
-                      mediaData.media_type === "VIDEO"
-                        ? mediaData.thumbnail_url
-                        : mediaData.media_url || ""
+                      mediaData?.media_type === "VIDEO"
+                        ? mediaData?.thumbnail_url || ""
+                        : mediaData?.media_url || ""
                     }
                     caption={mediaData.caption || ""}
                   />
@@ -593,9 +593,9 @@ Example: If you add “price”, automation will run when someone comments “pr
                   <IphoneComment
                     username={mediaData.username || ""}
                     postImage={
-                      mediaData.media_type === "VIDEO"
-                        ? mediaData.thumbnail_url
-                        : mediaData.media_url || ""
+                      mediaData?.media_type === "VIDEO"
+                        ? mediaData?.thumbnail_url || ""
+                        : mediaData?.media_url || ""
                     }
                     commentMessage={comment || ""}
                     commentKeyword={keywords.join(", ") || "Any"}
