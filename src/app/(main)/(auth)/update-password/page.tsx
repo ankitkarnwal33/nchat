@@ -186,7 +186,6 @@ export default function ResetPassword() {
     <Suspense
       fallback={
         <div>
-          <Header />
           <div className="flex min-h-svh items-center justify-center">
             <Card className="w-full max-w-md">
               <CardHeader className="text-center">
