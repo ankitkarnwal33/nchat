@@ -24,7 +24,6 @@ import {
 } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
 import { authClient } from "@/src/lib/auth-client";
-import Header from "@/src/components/Header";
 import { MailIcon } from "lucide-react";
 
 const resetPasswordSchema = z.object({

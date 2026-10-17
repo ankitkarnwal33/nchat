@@ -956,16 +956,8 @@ export const appRouter = createTRPCRouter({
         }
 
         const raw1 = await response.text();
-        console.log(raw1);
         const data = JSON.parse(raw1);
-        console.log(data);
         const shortToken = data?.access_token;
-        console.log(
-          "Token response keys:",
-          Object.keys(data),
-          "permissions:",
-          data.permissions,
-        );
 
         const testRes = await fetch(
           `https://graph.instagram.com/v25.0/me?fields=username,account_type&access_token=${shortToken}`,
@@ -1012,9 +1004,6 @@ export const appRouter = createTRPCRouter({
         const igUserRaw = await igUserResponse.text(); // read once, as text
         const igUser = JSON.parse(igUserRaw); // fine for username / picture
         const instagramUserId = extractUserId(igUserRaw); // exact ID as string
-        console.log("Ig User: ", igUser);
-        console.log("Instagram user id: ", instagramUserId);
-        // const igUser = await igUserResponse.json();
 
         const existingInstagramAccount =
           await prisma.instagramAccount.findUnique({

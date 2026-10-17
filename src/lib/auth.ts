@@ -49,7 +49,7 @@ export const auth = betterAuth({
           await prisma.subscription.create({
             data: {
               userId: user.id,
-              plan: "Free",
+              plan: "free",
               status: "active",
             },
           });

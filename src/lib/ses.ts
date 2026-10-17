@@ -10,25 +10,23 @@ const ses = new SESClient({
 });
 
 export async function sendEmail(to: string, subject: string, html: string) {
-    try {
-        
-        const command = new SendEmailCommand({
-          Source: process.env.AWS_SES_SOURCE!,
-          Destination: {
-            ToAddresses: [to],
-          },
-          Message: {
-            Subject: { Data: subject },
-            Body: {
-              Html: { Data: html },
-            },
-          },
-        });
-      
-        await ses.send(command);
+  try {
+    const command = new SendEmailCommand({
+      Source: process.env.AWS_SES_SOURCE!,
+      Destination: {
+        ToAddresses: [to.trim()],
+      },
+      Message: {
+        Subject: { Data: subject },
+        Body: {
+          Html: { Data: html },
+        },
+      },
+    });
 
-    } catch (error) {
-        console.error(error);
-        throw new Error(error as string);
-    }
+    await ses.send(command);
+  } catch (error) {
+    console.error(error);
+    throw new Error(error as string);
+  }
 }
