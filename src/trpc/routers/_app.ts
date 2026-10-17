@@ -959,10 +959,7 @@ export const appRouter = createTRPCRouter({
         const data = JSON.parse(raw1);
         const shortToken = data?.access_token;
 
-        const testRes = await fetch(
-          `https://graph.instagram.com/v25.0/me?fields=username,account_type&access_token=${shortToken}`,
-        );
-        console.log("Short token /me:", testRes.status, await testRes.text());
+        console.log("Short token is: ", shortToken);
 
         // const data = await response.json();
         // Get the access token and userId from the data
@@ -979,7 +976,10 @@ export const appRouter = createTRPCRouter({
         );
 
         if (!permanentAccessTokenResponse.ok) {
-          console.log("Throwing error here in permanernAccesssToken.");
+          console.log(
+            "Throwing error here in permanernAccesssToken.",
+            permanentAccessTokenResponse.status,
+          );
           throw new Error(await permanentAccessTokenResponse.text());
         }
 

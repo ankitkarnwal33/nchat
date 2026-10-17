@@ -15,9 +15,9 @@ export default function MediaCard({
 }) {
   const { setOpen } = useSidebar();
   const imageUrl =
-    media.media_type === "VIDEO" ? media.thumbnail_url : media.media_url;
+    media.media_type === "VIDEO" ? media?.thumbnail_url : media?.media_url;
 
-  const encodedImageUrl = encodeURIComponent(imageUrl);
+  const encodedImageUrl = encodeURIComponent(imageUrl || "");
 
   const caption = media.caption?.replaceAll(/<[^>]*>?/g, "") || "No caption";
   const mediaId = media.id;
@@ -28,9 +28,9 @@ export default function MediaCard({
         <div className="aspect-square w-full overflow-hidden rounded-lg relative">
           <Image
             src={
-              media.media_type === "VIDEO"
-                ? media.thumbnail_url
-                : media.media_url
+              media?.media_type === "VIDEO"
+                ? media?.thumbnail_url || ""
+                : media?.media_url || ""
             }
             alt={media.caption || "No caption"}
             width={1000}
