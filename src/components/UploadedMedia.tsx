@@ -60,12 +60,14 @@ export default function UploadedMedia({
   const mediaList =
     data?.pages.flatMap((page) => normalizeMediaPage(page)) ?? [];
 
+  console.log(mediaList);
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 xl:grid-cols-3   gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3   gap-4">
         {isLoading
           ? [1, 2, 3, 4, 5, 6].map((item) => (
-              <Card key={item} className="w-full ">
+              <Card key={item} className="w-full rounded-lg">
                 <CardContent>
                   <Skeleton className="aspect-video w-full relative opacity-30">
                     <IoMdImage className="w-10 h-10 text-muted-foreground absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
