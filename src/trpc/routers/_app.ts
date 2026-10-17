@@ -971,7 +971,7 @@ export const appRouter = createTRPCRouter({
         const permanentAccessTokenResponse = await fetch(
           `https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${process.env.INSTAGRAM_CLIENT_SECRET}&access_token=${shortToken}`,
           {
-            method: "POST",
+            method: "GET",
           },
         );
 
